@@ -1,0 +1,11 @@
+name = "brt-concerto-certo-app"
+main = "worker.js"
+compatibility_date = "2024-09-23"
+
+[assets]
+directory = "."
+binding = "ASSETS"
+
+[[kv_namespaces]]
+binding = "BRT_DATA"
+id = "d31d8afc962c4b2581e7b58fe581d0b6"
