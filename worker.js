@@ -7,6 +7,7 @@ const DEFAULT_PROFESSIONALS = [
 const DEFAULT_CONFIG = {
   whatsapp: "5541991187943",
   pix: "",
+  horario: "Seg a Sáb, 8h às 18h",
   cidades: "Curitiba, São José dos Pinhais, Colombo, Pinhais, Araucária, Campo Largo, Fazenda Rio Grande, Almirante Tamandaré, Piraquara",
 };
 
@@ -33,7 +34,12 @@ async function handleApi(request, env) {
 
     if (method === "POST" && path[0] === "requests") {
       const body = await request.json();
+      // Honeypot: bots fill hidden fields humans never see. Pretend success, save nothing.
+      if (body.website) {
+        return Response.json({ ok: true, item: { id: "0", status: "Novo" } });
+      }
       const data = await getAll(env);
+      const foto = typeof body.foto === "string" && body.foto.startsWith("data:image/") ? body.foto.slice(0, 900000) : "";
       const item = {
         id: Date.now().toString(),
         nome: String(body.nome || "").slice(0, 200),
@@ -43,6 +49,7 @@ async function handleApi(request, env) {
         servico: String(body.servico || "").slice(0, 150),
         desc: String(body.desc || "").slice(0, 1000),
         horario: String(body.horario || "").slice(0, 50),
+        foto,
         status: "Novo",
         pago: false,
         criadoEm: new Date().toISOString(),
@@ -94,6 +101,7 @@ async function handleApi(request, env) {
       if (!isAdmin(body)) return new Response("Forbidden", { status: 403 });
       const config = {
         whatsapp: String(body.whatsapp || "").replace(/\D/g, "").slice(0, 20),
+        horario: String(body.horario || "").slice(0, 100),
         pix: String(body.pix || "").slice(0, 200),
         cidades: String(body.cidades || "").slice(0, 500),
       };
@@ -113,6 +121,17 @@ export default {
     if (url.pathname.startsWith("/api")) {
       return handleApi(request, env);
     }
-    return env.ASSETS.fetch(request);
+    const res = await env.ASSETS.fetch(request);
+    if (res.status === 404) {
+      return new Response(
+        `<!DOCTYPE html><html lang="pt-BR"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Página não encontrada — BRT Soluções</title>
+        <style>body{font-family:Inter,sans-serif;background:#F6F4EF;color:#12233B;display:flex;align-items:center;justify-content:center;min-height:100vh;margin:0;padding:24px;text-align:center;}
+        .box{max-width:360px;}h1{font-family:'Barlow Condensed',sans-serif;font-size:28px;margin-bottom:8px;}
+        a{display:inline-block;margin-top:18px;background:#F0730B;color:#fff;text-decoration:none;padding:12px 20px;border-radius:9px;font-weight:700;}</style></head>
+        <body><div class="box"><h1>Página não encontrada</h1><p>Esse link não existe ou foi movido.</p><a href="/">Voltar para o início</a></div></body></html>`,
+        { status: 404, headers: { "content-type": "text/html; charset=utf-8" } }
+      );
+    }
+    return res;
   },
 };

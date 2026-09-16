@@ -1,4 +1,4 @@
-name = "brt-concerto-certo-app"
+name = "brt-solucoes-app-01"
 main = "worker.js"
 compatibility_date = "2024-09-23"
 
