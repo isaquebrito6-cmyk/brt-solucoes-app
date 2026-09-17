@@ -1,1175 +1,557 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>BRT Soluções — Conserto Certo</title>
-<meta name="description" content="Elétrica, hidráulica, reparo e construção de telhado, troca de chuveiros e tomadas, e manutenção predial geral. Atendimento em toda a Grande Curitiba. Orçamento sem compromisso.">
-<link rel="manifest" href="manifest.json">
-<meta name="theme-color" content="#12233B">
-<link rel="apple-touch-icon" href="icons/icon-192.png">
-<link rel="icon" href="icons/icon-192.png">
-
-<meta property="og:type" content="website">
-<meta property="og:site_name" content="BRT Soluções">
-<meta property="og:title" content="BRT Soluções — Conserto Certo">
-<meta property="og:description" content="Elétrica, hidráulica, telhados e manutenção predial. Atendimento em toda a Grande Curitiba. Peça seu orçamento sem compromisso.">
-<meta property="og:image" content="https://brt-solucoes-app-01.isaquebrito6.workers.dev/og-image.png">
-<meta property="og:url" content="https://brt-solucoes-app-01.isaquebrito6.workers.dev">
-<meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="BRT Soluções — Conserto Certo">
-<meta name="twitter:description" content="Elétrica, hidráulica, telhados e manutenção predial na Grande Curitiba.">
-<meta name="twitter:image" content="https://brt-solucoes-app-01.isaquebrito6.workers.dev/og-image.png">
-
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-<style>
-  :root{
-    --navy:#12233B;
-    --navy-2:#1B3A5C;
-    --orange:#F0730B;
-    --orange-dark:#D9640A;
-    --bg:#F6F4EF;
-    --surface:#FFFFFF;
-    --text:#1D1D1B;
-    --muted:#5B6472;
-    --green:#3E8E4F;
-    --red:#C23B3B;
-    --line:rgba(18,35,59,0.10);
-    --stripe:#F2B705;
-  }
-  *{box-sizing:border-box;}
-  html,body{margin:0;padding:0;}
-  body{
-    background:var(--bg);
-    color:var(--text);
-    font-family:'Inter',sans-serif;
-    -webkit-tap-highlight-color:transparent;
-    overscroll-behavior-y:none;
-  }
-  h1,h2,h3,.display{
-    font-family:'Barlow Condensed',sans-serif;
-    font-weight:800;
-    letter-spacing:0.2px;
-    line-height:1.05;
-    margin:0;
-  }
-  #app{
-    max-width:480px;
-    margin:0 auto;
-    min-height:100vh;
-    background:var(--bg);
-    position:relative;
-    padding-bottom:78px;
-  }
-  .screen{display:none;animation:fade .18s ease;}
-  .screen.active{display:block;}
-  @keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
-
-  /* TOP BAR */
-  .topbar{
-    background:var(--navy);
-    color:#fff;
-    padding:16px 18px 14px;
-    display:flex;
-    align-items:center;
-    gap:10px;
-    position:relative;
-    overflow:hidden;
-  }
-  .topbar::after{
-    content:"";
-    position:absolute;left:0;right:0;bottom:0;height:4px;
-    background:repeating-linear-gradient(45deg,var(--orange) 0 10px, var(--stripe) 10px 20px);
-    opacity:.9;
-  }
-  .brand-mark{
-    width:34px;height:34px;border-radius:9px;
-    display:flex;align-items:center;justify-content:center;flex-shrink:0;
-  }
-  .brand-mark img{width:100%;height:100%;border-radius:9px;}
-  .brand-text{display:flex;flex-direction:column;line-height:1;}
-  .brand-text .name{font-family:'Barlow Condensed';font-weight:800;font-size:18px;letter-spacing:.3px;}
-  .brand-text .sub{font-size:10.5px;color:#B9C6D6;font-weight:500;letter-spacing:.4px;margin-top:2px;}
-
-  /* HERO */
-  .hero{
-    background:linear-gradient(160deg,var(--navy) 0%, var(--navy-2) 100%);
-    color:#fff;
-    padding:26px 20px 30px;
-    position:relative;
-  }
-  .hero h1{font-size:34px;color:#fff;}
-  .hero h1 .accent{color:var(--orange);}
-  .hero p{color:#C7D2DF;font-size:14.5px;margin-top:10px;line-height:1.5;max-width:320px;}
-  .hero-cta{
-    margin-top:18px;display:flex;gap:10px;flex-wrap:wrap;
-  }
-  .badge-row{
-    display:flex;gap:8px;margin-top:20px;flex-wrap:wrap;
-  }
-  .badge{
-    background:rgba(255,255,255,0.08);
-    border:1px solid rgba(255,255,255,0.14);
-    color:#DCE5EE;
-    font-size:11.5px;
-    padding:7px 11px;
-    border-radius:20px;
-    display:flex;align-items:center;gap:6px;
-    font-weight:500;
-  }
-  .badge svg{width:13px;height:13px;flex-shrink:0;color:var(--orange);}
-
-  /* BUTTONS */
-  .btn{
-    border:none;border-radius:9px;padding:13px 18px;font-weight:700;
-    font-size:15px;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;
-    gap:8px;font-family:'Inter';transition:transform .08s ease;
-  }
-  .btn:active{transform:scale(0.97);}
-  .btn-primary{background:var(--orange);color:#fff;}
-  .btn-primary:hover{background:var(--orange-dark);}
-  .btn-outline{background:transparent;border:1.5px solid rgba(255,255,255,0.5);color:#fff;}
-  .btn-block{width:100%;}
-  .btn-dark{background:var(--navy);color:#fff;}
-  .btn-ghost{background:var(--line);color:var(--navy);}
-  .btn-sm{padding:9px 13px;font-size:13px;border-radius:7px;}
-  .btn-wa{background:#25D366;color:#fff;}
-
-  section.pad{padding:20px 18px;}
-  .section-title{font-size:22px;margin-bottom:4px;}
-  .section-lead{color:var(--muted);font-size:13.5px;margin-bottom:16px;}
-
-  /* SERVICE GRID */
-  .svc-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px;}
-  .svc-tile{
-    background:var(--surface);border:1px solid var(--line);border-radius:12px;
-    padding:14px 12px;display:flex;flex-direction:column;gap:8px;cursor:pointer;
-  }
-  .svc-tile .ic{
-    width:36px;height:36px;border-radius:8px;background:var(--navy);
-    display:flex;align-items:center;justify-content:center;
-  }
-  .svc-tile .ic svg{width:19px;height:19px;color:var(--orange);}
-  .svc-tile .t{font-weight:700;font-size:13.5px;color:var(--navy);line-height:1.2;}
-
-  /* SERVICE CARD (list) */
-  .svc-card{
-    background:var(--surface);border:1px solid var(--line);border-radius:14px;
-    padding:16px;margin-bottom:12px;display:flex;gap:13px;align-items:flex-start;
-  }
-  .svc-card .ic{
-    width:44px;height:44px;border-radius:10px;background:var(--navy);flex-shrink:0;
-    display:flex;align-items:center;justify-content:center;
-  }
-  .svc-card .ic svg{width:22px;height:22px;color:var(--orange);}
-  .svc-card .body h3{font-size:16.5px;color:var(--navy);}
-  .svc-card .body p{font-size:12.8px;color:var(--muted);margin:5px 0 10px;line-height:1.45;}
-
-  /* FORMS */
-  .field{margin-bottom:14px;}
-  .field label{display:block;font-size:12.5px;font-weight:700;color:var(--navy);margin-bottom:6px;letter-spacing:.2px;}
-  .field input,.field select,.field textarea{
-    width:100%;border:1.5px solid var(--line);background:var(--surface);
-    border-radius:9px;padding:12px 12px;font-size:14.5px;font-family:'Inter';color:var(--text);
-  }
-  .field input:focus,.field select:focus,.field textarea:focus{outline:2px solid var(--orange);border-color:transparent;}
-  .field textarea{resize:vertical;min-height:80px;}
-  .field-hint{font-size:11.5px;color:var(--muted);margin-top:5px;}
-
-  .card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:16px;margin-bottom:14px;box-shadow:0 2px 10px rgba(18,35,59,0.05);}
-  .card h3{font-size:16px;color:var(--navy);margin-bottom:10px;}
-
-  .svc-card{box-shadow:0 2px 10px rgba(18,35,59,0.05);}
-  .svc-tile{box-shadow:0 2px 8px rgba(18,35,59,0.04);transition:transform .12s ease;}
-  .svc-tile:active{transform:scale(0.96);}
-  .role-opt{box-shadow:0 2px 8px rgba(18,35,59,0.04);transition:transform .12s ease;}
-  .role-opt:active{transform:scale(0.98);}
-  input:focus-visible, select:focus-visible, textarea:focus-visible, button:focus-visible{outline:2px solid var(--orange);outline-offset:2px;}
-  input[type="file"]{font-size:12.5px;color:var(--muted);}
-
-  .divider{height:1px;background:var(--line);margin:18px 0;}
-
-  /* BOTTOM NAV */
-  .tabbar{
-    position:fixed;bottom:0;left:0;right:0;
-    max-width:480px;margin:0 auto;
-    background:#fff;border-top:1px solid var(--line);
-    display:flex;justify-content:space-around;
-    padding:8px 6px calc(8px + env(safe-area-inset-bottom));
-    box-shadow:0 -6px 18px rgba(18,35,59,0.06);
-    z-index:50;
-  }
-  .tab{
-    display:flex;flex-direction:column;align-items:center;gap:3px;
-    color:var(--muted);background:none;border:none;font-family:'Inter';
-    font-size:10.5px;font-weight:600;padding:5px 10px;border-radius:10px;flex:1;
-  }
-  .tab svg{width:21px;height:21px;}
-  .tab.active{color:var(--orange);}
-
-  /* TOAST */
-  .toast{
-    position:fixed;bottom:92px;left:50%;transform:translateX(-50%);
-    background:var(--navy);color:#fff;padding:12px 18px;border-radius:10px;
-    font-size:13.5px;font-weight:600;max-width:90%;text-align:center;
-    box-shadow:0 8px 20px rgba(0,0,0,0.25);z-index:100;opacity:0;transition:opacity .25s;
-    pointer-events:none;
-  }
-  .toast.show{opacity:1;}
-
-  /* SUCCESS SCREEN */
-  .success-box{
-    text-align:center;padding:50px 24px;
-  }
-  .success-icon{
-    width:70px;height:70px;border-radius:50%;background:#E9F5EA;margin:0 auto 18px;
-    display:flex;align-items:center;justify-content:center;
-  }
-  .success-icon svg{width:34px;height:34px;color:var(--green);}
-
-  /* ADMIN / PROFILE */
-  .role-pick{display:flex;flex-direction:column;gap:10px;margin-top:16px;}
-  .role-opt{
-    background:var(--surface);border:1.5px solid var(--line);border-radius:12px;
-    padding:16px;display:flex;align-items:center;gap:13px;cursor:pointer;
-  }
-  .role-opt .ic{width:40px;height:40px;border-radius:9px;background:var(--bg);display:flex;align-items:center;justify-content:center;}
-  .role-opt .ic svg{width:20px;height:20px;color:var(--navy);}
-  .role-opt .t{font-weight:700;font-size:14.5px;color:var(--navy);}
-  .role-opt .d{font-size:11.5px;color:var(--muted);margin-top:2px;}
-
-  .pill{display:inline-block;font-size:10.5px;font-weight:700;padding:4px 9px;border-radius:20px;letter-spacing:.3px;}
-  .pill-new{background:#FDEDD9;color:var(--orange-dark);}
-  .pill-progress{background:#DDEBF8;color:#1B5A8A;}
-  .pill-done{background:#E1F2E3;color:var(--green);}
-  .pill-paid{background:#12233B;color:#fff;}
-
-  .req-item{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:13px;margin-bottom:10px;}
-  .req-item .top-row{display:flex;justify-content:space-between;align-items:flex-start;gap:8px;}
-  .req-item .name{font-weight:700;color:var(--navy);font-size:14px;}
-  .req-item .meta{font-size:11.5px;color:var(--muted);margin-top:3px;}
-  .req-item .desc{font-size:12.5px;color:var(--text);margin-top:8px;line-height:1.4;}
-  .req-actions{display:flex;gap:7px;margin-top:10px;flex-wrap:wrap;}
-  select.status-select{border:1.5px solid var(--line);border-radius:7px;padding:7px 8px;font-size:12px;font-weight:600;color:var(--navy);background:#fff;}
-
-  .empty-state{text-align:center;padding:40px 20px;color:var(--muted);}
-  .empty-state svg{width:38px;height:38px;color:var(--line);margin-bottom:10px;}
-  .empty-state p{font-size:13px;}
-
-  .back-link{display:flex;align-items:center;gap:6px;color:var(--navy);font-weight:700;font-size:13px;margin-bottom:14px;cursor:pointer;}
-  .back-link svg{width:16px;height:16px;}
-
-  .note{
-    background:#FFF6E8;border:1px solid #F2D9A6;border-radius:10px;padding:11px 13px;
-    font-size:11.8px;color:#7A5A12;line-height:1.5;margin-top:6px;
-  }
-  .note.blue{background:#EAF2FA;border-color:#C6DCEF;color:#1B4F73;}
-
-  .kv-row{display:flex;justify-content:space-between;padding:9px 0;border-bottom:1px solid var(--line);font-size:13px;}
-  .kv-row:last-child{border-bottom:none;}
-  .kv-row .k{color:var(--muted);}
-  .kv-row .v{font-weight:700;color:var(--navy);}
-
-  .list-manage-item{display:flex;justify-content:space-between;align-items:center;padding:11px 0;border-bottom:1px solid var(--line);}
-  .list-manage-item:last-child{border-bottom:none;}
-  .list-manage-item .t{font-weight:700;font-size:13.5px;color:var(--navy);}
-  .list-manage-item .s{font-size:11.5px;color:var(--muted);}
-  .icon-btn{background:none;border:none;color:var(--red);cursor:pointer;padding:6px;}
-  .icon-btn svg{width:17px;height:17px;}
-
-  .install-banner{
-    background:var(--orange);color:#fff;padding:11px 16px;font-size:12.5px;font-weight:600;
-    display:flex;align-items:center;justify-content:space-between;gap:10px;
-  }
-  .install-banner button{background:rgba(255,255,255,0.22);border:none;color:#fff;font-weight:700;
-    padding:7px 12px;border-radius:7px;font-size:12px;flex-shrink:0;}
-  .install-banner .x{background:none;color:#fff;opacity:.85;font-size:18px;padding:0 4px;}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="BRT Soluções • Conserto Certo — Elétrica, Hidráulica, Telhados, Vidro Temperado, Pergolado, Manutenção Predial. Grande Curitiba. Ligue: (41) 99118-7943">
+    <meta name="theme-color" content="#1565C0">
+    
+    <!-- Ícone do site -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='12' fill='%231565C0'/%3E%3Cpath d='M50 18L32 32v20c0 6 3 11 8 14l10 6 10-6c5-3 8-8 8-14V32L50 18zm0 38c-3 0-6-1-8-3l-2-2V38l10-8 10 8v13l-2 2c-2 2-5 3-8 3z' fill='white'/%3E%3Cpath d='M72 78L50 65l-22 13v-8l22-13 22 13v8z' fill='%23E65100'/%3E%3C/svg%3E">
+    <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='12' fill='%231565C0'/%3E%3Cpath d='M50 18L32 32v20c0 6 3 11 8 14l10 6 10-6c5-3 8-8 8-14V32L50 18zm0 38c-3 0-6-1-8-3l-2-2V38l10-8 10 8v13l-2 2c-2 2-5 3-8 3z' fill='white'/%3E%3Cpath d='M72 78L50 65l-22 13v-8l22-13 22 13v8z' fill='%23E65100'/%3E%3C/svg%3E">
+    
+    <!-- TÍTULO DA ABA -->
+    <title>BRT Soluções • Conserto Certo</title>
+    
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+    
+    <style>
+        *{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI',Roboto,Oxygen,Ubuntu,sans-serif}
+        :root{
+            --primario:#1565C0;--primario-escuro:#0D47A1;--primario-claro:#42A5F5;
+            --secundario:#E65100;--secundario-claro:#FF9100;--destaque:#FFC107;
+            --sucesso:#2E7D32;--alerta:#F57C00;--erro:#C62828;
+            --fundo:#F5F7FA;--texto:#263238;--texto-claro:#78909C;--borda:#ECEFF1;
+            --sombra:0 2px 8px rgba(0,0,0,.08);--sombra-forte:0 8px 24px rgba(21,101,192,.15)
+        }
+        html{scroll-behavior:smooth}
+        body{background:var(--fundo);color:var(--texto);line-height:1.6}
+        a{text-decoration:none;color:inherit}
+        .barra-topo{background:var(--primario-escuro);color:white;font-size:.85rem;padding:.6rem 1rem;text-align:center}
+        .barra-topo a{color:var(--destaque);font-weight:600}
+        .barra-emergencia{background:linear-gradient(90deg,var(--secundario),#FB8C00);color:white;text-align:center;padding:.7rem 1rem;font-weight:600;font-size:.95rem}
+        .barra-emergencia a{color:white;text-decoration:underline}
+        nav{background:#fff;position:sticky;top:0;width:100%;z-index:9999;box-shadow:var(--sombra)}
+        .nav-container{max-width:1200px;margin:0 auto;padding:0 1rem;display:flex;justify-content:space-between;align-items:center;height:64px}
+        .logo{font-size:1.15rem;font-weight:700;display:flex;align-items:center;gap:.3rem}
+        .logo-azul{color:var(--primario)}
+        .logo-laranja{color:var(--secundario)}
+        .menu-btn{display:none;background:none;border:none;font-size:1.6rem;color:var(--primario);cursor:pointer}
+        .nav-links{display:flex;gap:1rem;list-style:none;font-weight:500;font-size:.9rem;align-items:center}
+        .nav-links a{color:var(--texto);padding:.5rem 0;border-bottom:2px solid transparent;transition:.25s}
+        .nav-links a:hover,.nav-links a.ativo{color:var(--primario);border-bottom-color:var(--primario)}
+        .btn-nav{background:var(--primario);color:#fff!important;padding:.6rem 1.2rem!important;border-radius:50px;border:none;margin-left:.3rem;transition:.3s}
+        .btn-nav:hover{background:var(--secundario);transform:translateY(-1px)}
+        .oculto{display:none!important}
+        section{max-width:1200px;margin:0 auto;padding:4rem 1.2rem}
+        .secao-titulo{text-align:center;margin-bottom:3rem}
+        .secao-titulo h2{font-size:2rem;color:var(--primario);margin-bottom:.6rem}
+        .linha{width:60px;height:4px;background:linear-gradient(90deg,var(--primario),var(--secundario));margin:0 auto;border-radius:2px}
+        .subtitulo{color:var(--texto-claro);margin-top:.8rem;font-size:1.05rem;max-width:600px;margin-left:auto;margin-right:auto}
+        .destaque-orcamento{background:linear-gradient(135deg,#FFF8E1,#FFECB3);color:#E65100;padding:1.2rem;border-radius:12px;text-align:center;font-weight:600;margin:1.5rem 0;box-shadow:0 4px 12px rgba(255,193,7,.15)}
+        #inicio{background:linear-gradient(135deg,var(--primario) 0%,var(--primario-escuro) 100%);min-height:90vh;display:flex;align-items:center;margin-top:0;color:white}
+        .hero-conteudo{max-width:680px;margin:0 auto;text-align:center;animation:surgir .8s ease-out}
+        @keyframes surgir{from{opacity:0;transform:translateY(25px)}to{opacity:1;transform:translateY(0)}}
+        .hero-conteudo h1{font-size:2.2rem;line-height:1.25;margin-bottom:1.5rem}
+        .hero-conteudo h1 span{color:var(--destaque)}
+        .hero-conteudo p{font-size:1.1rem;margin-bottom:1rem;opacity:.92}
+        .hero-botoes{display:flex;gap:1rem;flex-wrap:wrap;justify-content:center;margin:2rem 0}
+        .btn{display:inline-flex;align-items:center;gap:.5rem;padding:1rem 2rem;border-radius:50px;font-weight:600;font-size:1rem;border:none;cursor:pointer;transition:.3s}
+        .btn:hover{transform:translateY(-3px);box-shadow:0 10px 25px rgba(0,0,0,.2)}
+        .btn-principal{background:var(--secundario);color:white}
+        .btn-principal:hover{background:#FB8C00}
+        .btn-branco{background:white;color:var(--primario)}
+        .btn-branco:hover{background:#f8f9fa}
+        .selos{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;max-width:500px;margin:0 auto}
+        .selo{background:rgba(255,255,255,.12);padding:1rem;border-radius:12px;backdrop-filter:blur(5px);transition:.3s}
+        .selo:hover{transform:translateY(-5px);background:rgba(255,255,255,.2)}
+        .selo-icone{font-size:1.6rem;margin-bottom:.3rem}
+        .selo-nome{font-weight:600;font-size:.9rem}
+        .servicos-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1.8rem}
+        .servico-card{background:white;padding:2rem;border-radius:16px;box-shadow:var(--sombra);border-left:4px solid var(--primario);transition:.3s}
+        .servico-card:hover{transform:translateY(-6px);box-shadow:var(--sombra-forte);border-left-color:var(--secundario)}
+        .servico-icone{font-size:2rem;margin-bottom:1rem}
+        .servico-card h3{color:var(--primario);margin-bottom:1rem;font-size:1.25rem}
+        .servico-detalhes{margin-top:1rem;font-size:.9rem;color:var(--texto-claro)}
+        .servico-detalhes li{list-style:none;padding:.3rem 0;border-bottom:1px dashed var(--borda)}
+        .servico-detalhes li:last-child{border-bottom:none}
+        .garantia-box{background:linear-gradient(135deg,#E8F5E9,#C8E6C9);padding:2.5rem;border-radius:16px;text-align:center;margin:3rem 0}
+        .garantia-box h3{color:var(--sucesso);font-size:1.5rem;margin-bottom:.8rem}
+        .garantia-destaque{font-size:1.1rem;font-weight:700;color:var(--sucesso);margin-top:.5rem}
+        .porque-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:2rem;margin-top:2rem}
+        .porque-item{display:flex;gap:1rem;align-items:flex-start}
+        .porque-num{background:linear-gradient(135deg,var(--primario),var(--secundario));color:white;width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;flex-shrink:0}
+        .regioes-lista{display:flex;flex-wrap:wrap;gap:.8rem;justify-content:center;margin-top:1.5rem}
+        .regiao-tag{background:white;padding:.8rem 1.4rem;border-radius:50px;box-shadow:var(--sombra);font-weight:500;transition:.3s}
+        .regiao-tag:hover{transform:scale(1.05);background:var(--primario);color:white}
+        .form-container{background:white;padding:2.5rem;border-radius:16px;box-shadow:var(--sombra-forte);max-width:540px;margin:0 auto}
+        .form-grupo{margin-bottom:1.2rem}
+        label{display:block;margin-bottom:.4rem;font-weight:500;color:var(--texto)}
+        input,select,textarea{width:100%;padding:.95rem 1rem;border:2px solid var(--borda);border-radius:10px;font-size:1rem;transition:.25s}
+        input:focus,select:focus,textarea:focus{outline:none;border-color:var(--primario);box-shadow:0 0 0 4px rgba(21,101,192,.1)}
+        button[type="submit"]{width:100%;padding:1rem;background:linear-gradient(90deg,var(--primario),#42A5F5);color:white;border:none;border-radius:10px;font-size:1rem;font-weight:600;cursor:pointer;margin-top:.5rem;transition:.3s}
+        button[type="submit"]:hover{background:linear-gradient(90deg,var(--primario-escuro),var(--primario));transform:translateY(-2px)}
+        button[type="submit"]:disabled{opacity:.7;cursor:not-allowed;transform:none}
+        .mensagem{padding:1rem;border-radius:10px;margin-top:1rem;display:none}
+        .mensagem.sucesso{background:#E8F5E9;color:var(--sucesso);display:block}
+        .mensagem.erro{background:#FFEBEE;color:var(--erro);display:block}
+        .painel{display:none}
+        .painel.ativo{display:block}
+        .cabecalho-admin{display:flex;justify-content:space-between;align-items:center;margin-bottom:2rem;flex-wrap:wrap;gap:1rem}
+        .btn-sair{background:var(--erro);color:white;border:none;padding:.7rem 1.5rem;border-radius:8px;font-weight:600;cursor:pointer;transition:.3s}
+        .btn-sair:hover{background:#B71C1C}
+        .solicitacao-card{background:white;padding:1.5rem;border-radius:12px;box-shadow:var(--sombra);margin-bottom:1rem;border-left:4px solid var(--alerta);transition:.3s}
+        .solicitacao-card:hover{box-shadow:var(--sombra-forte)}
+        .status-pendente{border-left-color:var(--alerta)}
+        .status-andamento{border-left-color:var(--primario)}
+        .status-concluido{border-left-color:var(--sucesso)}
+        .status-badge{display:inline-block;padding:.3rem .8rem;border-radius:50px;font-size:.85rem;font-weight:600;margin-top:.5rem}
+        .badge-pendente{background:#FFF3E0;color:#E65100}
+        .badge-andamento{background:#E3F2FD;color:#1565C0}
+        .badge-concluido{background:#E8F5E9;color:#2E7D32}
+        .select-status{margin-top:.8rem;padding:.5rem;border-radius:6px;border:1px solid #ddd;cursor:pointer}
+        .whatsapp-fixo{position:fixed;bottom:20px;right:20px;z-index:9998;background:#25D366;color:white;width:60px;height:60px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:32px;box-shadow:0 4px 15px rgba(37,211,102,.4);transition:.3s}
+        .whatsapp-fixo:hover{transform:scale(1.15)}
+        footer{background:#0F1E33;color:white;padding:3rem 1.2rem 1.5rem;margin-top:2rem}
+        .rodape-container{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:2rem}
+        .rodape-col h3{margin-bottom:1rem;color:var(--secundario-claro)}
+        .rodape-col p{margin-bottom:.5rem;opacity:.8}
+        .rodape-col a{color:var(--destaque)}
+        .rodape-baixo{text-align:center;margin-top:2rem;padding-top:2rem;border-top:1px solid rgba(255,255,255,.1);opacity:.6;font-size:.9rem}
+        @media (max-width:768px){
+            .barra-topo{font-size:.75rem}
+            .menu-btn{display:block}
+            .nav-links{position:fixed;top:0;right:-105%;height:100vh;width:280px;background:white;flex-direction:column;padding:4rem 1.5rem;box-shadow:-4px 0 12px rgba(0,0,0,.1);transition:.3s;align-items:flex-start}
+            .nav-links.aberto{right:0}
+            .btn-nav{margin-left:0;margin-top:.5rem;text-align:center;width:100%}
+            .hero-conteudo h1{font-size:1.7rem}
+            .selos{grid-template-columns:repeat(2,1fr)}
+            .form-container{padding:1.5rem}
+        }
+    </style>
 </head>
 <body>
-<div id="app">
 
-  <div id="installBanner" class="install-banner" style="display:none;">
-    <span>Instale o app na sua tela inicial para acesso rápido</span>
-    <div style="display:flex;gap:6px;align-items:center;">
-      <button id="installBtn">Instalar</button>
-      <button class="x" id="dismissInstall" aria-label="Fechar aviso">&times;</button>
-    </div>
-  </div>
-
-  <div class="topbar">
-    <div class="brand-mark">
-      <img src="icons/icon-192.png" alt="">
-    </div>
-    <div class="brand-text">
-      <span class="name">BRT SOLUÇÕES</span>
-      <span class="sub">CONSERTO CERTO</span>
-    </div>
-  </div>
-
-  <!-- ===================== HOME ===================== -->
-  <div class="screen active" id="screen-home">
-    <div class="hero">
-      <h1>O reparo certo,<br><span class="accent">na hora certa.</span></h1>
-      <p>Elétrica, hidráulica, telhado e manutenção predial com atendimento em toda a Grande Curitiba.</p>
-      <div class="hero-cta">
-        <button class="btn btn-primary" onclick="goTo('servicos')">Solicitar serviço</button>
-        <button class="btn btn-outline" onclick="goTo('cadastro')">Fazer cadastro</button>
-      </div>
-      <div class="badge-row">
-        <span class="badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 21s-7-4.5-7-11a7 7 0 1114 0c0 6.5-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/></svg>Grande Curitiba</span>
-        <span class="badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="9"/></svg>Orçamento sem compromisso</span>
-        <span class="badge" id="horarioBadge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg></span>
-      </div>
-    </div>
-
-    <section class="pad">
-      <h2 class="section-title">Nossos serviços</h2>
-      <p class="section-lead">Toque em um serviço para solicitar agora.</p>
-      <div class="svc-grid" id="homeSvcGrid"></div>
-    </section>
-
-    <section class="pad" style="padding-top:0;">
-      <div class="card">
-        <h3>Como funciona</h3>
-        <div class="kv-row"><span class="k">1. Você se cadastra</span><span class="v">1 min</span></div>
-        <div class="kv-row"><span class="k">2. Descreve o problema</span><span class="v">rápido</span></div>
-        <div class="kv-row"><span class="k">3. Falamos com você</span><span class="v">WhatsApp</span></div>
-        <div class="kv-row"><span class="k">4. Serviço + pagamento</span><span class="v">no local</span></div>
-      </div>
-    </section>
-  </div>
-
-  <!-- ===================== SERVIÇOS ===================== -->
-  <div class="screen" id="screen-servicos">
-    <section class="pad">
-      <h2 class="section-title">Serviços</h2>
-      <p class="section-lead">Reparo certo, do jeito certo — escolha o serviço que você precisa.</p>
-      <div id="svcList"></div>
-    </section>
-  </div>
-
-  <!-- ===================== CADASTRO ===================== -->
-  <div class="screen" id="screen-cadastro">
-    <section class="pad">
-      <h2 class="section-title">Cadastro do cliente</h2>
-      <p class="section-lead">Preencha seus dados. Ao enviar, você fala direto com a gente pelo WhatsApp.</p>
-
-      <div id="cadastroForm">
-        <div class="field">
-          <label>Nome completo</label>
-          <input type="text" id="f-nome" placeholder="Seu nome">
-        </div>
-        <div class="field">
-          <label>WhatsApp / telefone</label>
-          <input type="tel" id="f-tel" placeholder="(41) 99999-9999" maxlength="16" oninput="maskPhone(this)">
-        </div>
-        <div class="field">
-          <label>Cidade</label>
-          <select id="f-cidade">
-            <option value="">Selecione a cidade</option>
-          </select>
-        </div>
-        <div class="field">
-          <label>Bairro / endereço</label>
-          <input type="text" id="f-endereco" placeholder="Bairro, rua e número">
-        </div>
-        <div class="field">
-          <label>Serviço desejado</label>
-          <select id="f-servico">
-            <option value="">Selecione o serviço</option>
-          </select>
-        </div>
-        <div class="field">
-          <label>Descreva o problema</label>
-          <textarea id="f-desc" placeholder="Ex: chuveiro parou de esquentar, telhado com goteira na sala..."></textarea>
-        </div>
-        <div class="field">
-          <label>Foto do problema <span style="font-weight:500;color:var(--muted);">(opcional, ajuda no orçamento)</span></label>
-          <input type="file" id="f-foto" accept="image/*" capture="environment" onchange="handlePhotoSelect(event)">
-          <div id="fotoPreviewBox" style="display:none;margin-top:10px;position:relative;width:100px;">
-            <img id="fotoPreview" style="width:100px;height:100px;object-fit:cover;border-radius:10px;border:1.5px solid var(--line);" />
-            <button type="button" onclick="clearPhoto()" aria-label="Remover foto" style="position:absolute;top:-8px;right:-8px;width:24px;height:24px;border-radius:50%;background:var(--red);color:#fff;border:2px solid #fff;font-weight:700;font-size:13px;line-height:1;">&times;</button>
-          </div>
-        </div>
-        <div class="field">
-          <label>Melhor horário para contato</label>
-          <select id="f-horario">
-            <option value="Qualquer horário">Qualquer horário</option>
-            <option value="Manhã">Manhã</option>
-            <option value="Tarde">Tarde</option>
-            <option value="Noite">Noite</option>
-          </select>
-        </div>
-        <input type="text" id="f-hp" name="website" tabindex="-1" autocomplete="off" style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0;">
-
-
-        <p class="field-hint" style="margin-bottom:14px;">Seus dados são usados só para entrarmos em contato sobre o serviço solicitado — nunca compartilhados com terceiros.</p>
-        <button class="btn btn-wa btn-block" id="submitBtn" onclick="submitCadastro()">
-          <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.87.51 3.62 1.4 5.12L2 22l5.2-1.36a9.9 9.9 0 004.84 1.24c5.46 0 9.91-4.45 9.91-9.91C21.95 6.45 17.5 2 12.04 2zm5.8 14.02c-.24.68-1.4 1.32-1.92 1.4-.5.08-1.12.11-1.8-.11-.42-.13-.96-.31-1.65-.6-2.9-1.25-4.8-4.16-4.94-4.36-.14-.2-1.18-1.57-1.18-3 0-1.42.75-2.12 1.02-2.41.26-.29.57-.36.76-.36h.55c.18 0 .42-.02.65.5.24.53.82 2 .89 2.15.07.14.11.31.02.5-.1.19-.15.31-.29.48-.14.17-.3.38-.43.5-.14.14-.29.29-.13.57.17.29.75 1.25 1.62 2.03 1.12 1 2.06 1.31 2.35 1.46.29.14.45.12.62-.05.17-.17.71-.83.9-1.11.19-.29.38-.24.63-.14.26.1 1.65.79 1.94.93.29.14.48.21.55.33.07.13.07.72-.17 1.4z"/></svg>
-          Enviar via WhatsApp
-        </button>
-        <p class="field-hint" style="text-align:center;margin-top:10px;">Seus dados também ficam salvos neste app.</p>
-      </div>
-
-      <div id="cadastroSuccess" style="display:none;">
-        <div class="success-box">
-          <div class="success-icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M20 6L9 17l-5-5"/></svg>
-          </div>
-          <h3 style="font-size:20px;">Cadastro enviado!</h3>
-          <p style="color:var(--muted);font-size:13.5px;margin-top:8px;">Abrimos o WhatsApp com sua solicitação pronta. É só enviar a mensagem para confirmar.</p>
-          <button class="btn btn-dark" style="margin-top:20px;" onclick="resetCadastro()">Fazer novo cadastro</button>
-        </div>
-      </div>
-    </section>
-  </div>
-
-  <!-- ===================== PERFIL (hub) ===================== -->
-  <div class="screen" id="screen-perfil">
-    <section class="pad">
-      <h2 class="section-title">Área restrita</h2>
-      <p class="section-lead">Acesso para profissionais e administrador.</p>
-      <div class="role-pick" id="rolePickBox">
-        <div class="role-opt" onclick="goTo('login-pro')">
-          <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14.7 6.3a1 1 0 010 1.4l-7 7a1 1 0 01-1.4 0l-2-2a1 1 0 010-1.4l7-7a1 1 0 011.4 0z"/><path d="M16 8l2-2M2 22l4-1 9-9-3-3-9 9z"/></svg></div>
-          <div>
-            <div class="t">Sou profissional</div>
-            <div class="d">Ver e gerenciar atendimentos</div>
-          </div>
-        </div>
-        <div class="role-opt" onclick="goTo('login-admin')">
-          <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l8 4v6c0 5-3.5 8-8 10-4.5-2-8-5-8-10V6z"/></svg></div>
-          <div>
-            <div class="t">Sou administrador</div>
-            <div class="d">Gerenciar equipe e configurações</div>
-          </div>
-        </div>
-      </div>
-
-      <div class="divider"></div>
-      <div class="card">
-        <h3 style="margin-bottom:6px;">Sobre a BRT Soluções</h3>
-        <p style="font-size:12.8px;color:var(--muted);line-height:1.5;">Atendimento residencial e predial em toda a Grande Curitiba, com orçamento sem compromisso e contato direto pelo WhatsApp.</p>
-        <button class="btn btn-ghost btn-block" style="margin-top:12px;" onclick="shareApp()">
-          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" style="margin-right:6px;"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.6 10.6l6.8-3.8M8.6 13.4l6.8 3.8"/></svg>
-          Compartilhar o app
-        </button>
-        <div class="divider"></div>
-        <div style="display:flex;gap:16px;flex-wrap:wrap;">
-          <span class="back-link" style="margin:0;" onclick="goTo('termos')">Termos de uso</span>
-          <span class="back-link" style="margin:0;" onclick="goTo('privacidade')">Privacidade</span>
-        </div>
-      </div>
-    </section>
-  </div>
-
-  <!-- ===================== TERMOS DE USO ===================== -->
-  <div class="screen" id="screen-termos">
-    <section class="pad">
-      <div class="back-link" onclick="goTo('perfil')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M15 18l-6-6 6-6"/></svg>Voltar</div>
-      <h2 class="section-title">Termos de uso</h2>
-      <div class="card" style="font-size:13px;color:var(--text);line-height:1.6;">
-        <p><strong>1. Sobre o serviço.</strong> A BRT Soluções conecta clientes a profissionais de elétrica, hidráulica, telhados e manutenção predial na Grande Curitiba. O app organiza cadastros e solicitações; o contato final e a contratação do serviço são feitos diretamente com o profissional, geralmente por WhatsApp.</p>
-        <p><strong>2. Orçamentos.</strong> Valores informados antes da visita técnica são estimativas e podem ser ajustados após avaliação presencial do problema.</p>
-        <p><strong>3. Responsabilidade.</strong> O profissional responsável se compromete a prestar o serviço com qualidade técnica. Problemas identificados só após a execução do serviço devem ser reportados o quanto antes para avaliação.</p>
-        <p><strong>4. Pagamento.</strong> As formas de pagamento aceitas são combinadas diretamente com o profissional no momento do atendimento.</p>
-        <p><strong>5. Alterações.</strong> Estes termos podem ser atualizados conforme o serviço evolui. A versão vigente é sempre a exibida neste app.</p>
-      </div>
-    </section>
-  </div>
-
-  <!-- ===================== PRIVACIDADE ===================== -->
-  <div class="screen" id="screen-privacidade">
-    <section class="pad">
-      <div class="back-link" onclick="goTo('perfil')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M15 18l-6-6 6-6"/></svg>Voltar</div>
-      <h2 class="section-title">Política de privacidade</h2>
-      <div class="card" style="font-size:13px;color:var(--text);line-height:1.6;">
-        <p><strong>Quais dados coletamos.</strong> Nome, telefone, cidade/endereço e a descrição do serviço solicitado — apenas o necessário para viabilizar o atendimento.</p>
-        <p><strong>Como usamos.</strong> Seus dados servem exclusivamente para contato sobre o serviço solicitado e para o profissional se organizar. Não vendemos nem compartilhamos seus dados com terceiros para fins de publicidade.</p>
-        <p><strong>Onde ficam armazenados.</strong> As solicitações ficam guardadas de forma segura para que o administrador e o profissional responsável possam acompanhar os atendimentos.</p>
-        <p><strong>Seus direitos.</strong> Você pode pedir a exclusão dos seus dados a qualquer momento, entrando em contato pelo WhatsApp informado no app, conforme a Lei Geral de Proteção de Dados (LGPD).</p>
-      </div>
-    </section>
-  </div>
-
-  <!-- ===================== LOGIN PROFISSIONAL ===================== -->
-  <div class="screen" id="screen-login-pro">
-    <section class="pad">
-      <div class="back-link" onclick="goTo('perfil')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M15 18l-6-6 6-6"/></svg>Voltar</div>
-      <h2 class="section-title">Acesso do profissional</h2>
-      <p class="section-lead">Selecione seu nome e informe o PIN cadastrado pelo administrador.</p>
-      <div id="proLoginEmpty" style="display:none;" class="empty-state">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg>
-        <p>Nenhum profissional cadastrado ainda. Peça ao administrador pra te adicionar no painel.</p>
-      </div>
-      <div id="proLoginForm">
-        <div class="field">
-          <label>Profissional</label>
-          <select id="pro-nome"></select>
-        </div>
-        <div class="field">
-          <label>PIN de acesso</label>
-          <input type="password" id="pro-pin" inputmode="numeric" placeholder="••••">
-        </div>
-        <button class="btn btn-dark btn-block" onclick="loginProfissional()">Entrar</button>
-        <p id="proLoginErr" class="note" style="display:none;margin-top:14px;">PIN incorreto. Confira com o administrador.</p>
-      </div>
-    </section>
-  </div>
-
-  <!-- ===================== PAINEL PROFISSIONAL ===================== -->
-  <div class="screen" id="screen-pro-panel">
-    <section class="pad">
-      <div class="back-link" onclick="logoutRole()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M15 18l-6-6 6-6"/></svg>Sair</div>
-      <h2 class="section-title">Meus atendimentos</h2>
-      <p class="section-lead" id="proWelcome"></p>
-      <div id="proReqList"></div>
-    </section>
-  </div>
-
-  <!-- ===================== LOGIN ADMIN ===================== -->
-  <div class="screen" id="screen-login-admin">
-    <section class="pad">
-      <div class="back-link" onclick="goTo('perfil')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M15 18l-6-6 6-6"/></svg>Voltar</div>
-      <h2 class="section-title">Acesso do administrador</h2>
-      <p class="section-lead">Informe o e-mail cadastrado como administrador.</p>
-      <div class="field">
-        <label>E-mail do administrador</label>
-        <input type="email" id="admin-email" placeholder="seuemail@exemplo.com">
-      </div>
-      <button class="btn btn-dark btn-block" onclick="loginAdmin()">Entrar</button>
-      <p id="adminLoginErr" class="note" style="display:none;margin-top:14px;">E-mail não reconhecido como administrador.</p>
-      <p class="note blue" style="margin-top:16px;">O e-mail é conferido no servidor, e o acesso fica válido por 12 horas. Ainda não tem senha nem múltiplos administradores — se quiser evoluir pra isso, é só pedir.</p>
-    </section>
-  </div>
-
-  <!-- ===================== PAINEL ADMIN ===================== -->
-  <div class="screen" id="screen-admin-panel">
-    <section class="pad">
-      <div class="back-link" onclick="logoutRole()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M15 18l-6-6 6-6"/></svg>Sair</div>
-      <h2 class="section-title">Painel administrador</h2>
-      <p class="section-lead">Acesso total — gerencie a equipe e as configurações do app.</p>
-      <p id="syncNote" class="note blue" style="margin-bottom:16px;"></p>
-
-      <div class="card">
-        <h3>Solicitações recebidas <span id="reqCount" class="pill pill-new"></span></h3>
-        <div id="adminReqList"></div>
-      </div>
-
-      <div class="card">
-        <h3>Profissionais</h3>
-        <div id="proManageList"></div>
-        <div class="divider"></div>
-        <div class="field"><label>Nome</label><input id="new-pro-nome" type="text" placeholder="Nome do profissional"></div>
-        <div class="field"><label>WhatsApp</label><input id="new-pro-tel" type="tel" placeholder="(41) 9 9999-9999"></div>
-        <div class="field"><label>Especialidade</label><input id="new-pro-esp" type="text" placeholder="Ex: Elétrica e hidráulica"></div>
-        <div class="field"><label>PIN de acesso (4 dígitos)</label><input id="new-pro-pin" type="text" inputmode="numeric" placeholder="0000"></div>
-        <button class="btn btn-primary btn-block" onclick="addProfissional()">Adicionar profissional</button>
-      </div>
-
-      <div class="card">
-        <h3>Configurações</h3>
-        <div class="field"><label>WhatsApp para contato do cliente</label><input id="cfg-whatsapp" type="tel" placeholder="55419xxxxxxxx"></div>
-        <div class="field"><label>Horário de atendimento</label><input id="cfg-horario" type="text" placeholder="Seg a Sáb, 8h às 18h"></div>
-        <div class="field"><label>Chave Pix para cobrança</label><input id="cfg-pix" type="text" placeholder="Chave Pix (telefone, e-mail ou aleatória)"></div>
-        <div class="field"><label>Cidades atendidas (separadas por vírgula)</label><textarea id="cfg-cidades"></textarea></div>
-        <button class="btn btn-dark btn-block" onclick="saveConfig()">Salvar configurações</button>
-      </div>
-    </section>
-  </div>
-
+<div class="barra-emergencia">
+    🚨 Atendimento de Emergência também disponível! Ligue agora → <a href="tel:+5541991187943">(41) 99118-7943</a>
 </div>
 
-<div class="toast" id="toast" role="status" aria-live="polite"></div>
-
-<div class="tabbar">
-  <button class="tab active" data-tab="home" onclick="goTo('home')">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/></svg>
-    Início
-  </button>
-  <button class="tab" data-tab="servicos" onclick="goTo('servicos')">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14.7 6.3a1 1 0 010 1.4l-7 7a1 1 0 01-1.4 0l-2-2a1 1 0 010-1.4l7-7a1 1 0 011.4 0z"/><path d="M16 8l2-2M2 22l4-1 9-9-3-3-9 9z"/></svg>
-    Serviços
-  </button>
-  <button class="tab" data-tab="cadastro" onclick="goTo('cadastro')">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M9 7h6M9 11h6M9 15h4"/></svg>
-    Cadastro
-  </button>
-  <button class="tab" data-tab="perfil" onclick="goTo('perfil')">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg>
-    Perfil
-  </button>
+<div class="barra-topo">
+    📞 Atendimento: <a href="tel:+5541991187943">(41) 99118-7943</a> | ✉️ <a href="mailto:ipbisaque@gmail.com">ipbisaque@gmail.com</a> | ⏰ Seg a Sex: 8h às 18h • Sáb: 8h às 13h
 </div>
+
+<a href="https://wa.me/5541991187943" target="_blank" class="whatsapp-fixo" aria-label="Chamar no WhatsApp">💬</a>
+
+<nav>
+    <div class="nav-container">
+        <a href="#inicio" class="logo">
+            <span class="logo-azul">BRT Soluções</span>
+            <span class="logo-laranja">• Conserto Certo</span>
+        </a>
+        <button class="menu-btn" id="menuBtn" aria-label="Abrir menu">☰</button>
+        <ul class="nav-links" id="menuNav">
+            <li><a href="#inicio" class="link-nav">Início</a></li>
+            <li><a href="#servicos" class="link-nav">Serviços</a></li>
+            <li><a href="#diferencial" class="link-nav">Diferencial</a></li>
+            <li><a href="#atendimento" class="link-nav">Atendimento</a></li>
+            <li><a href="#solicitar" class="link-nav">Solicitar</a></li>
+            <li><a href="#sobre" class="link-nav">Sobre</a></li>
+            <li><a href="#entrar" class="link-nav">Entrar</a></li>
+            <li id="adm-item" class="oculto"><a href="#admin" class="link-nav btn-nav">Painel Admin</a></li>
+        </ul>
+    </div>
+</nav>
+
+<section id="inicio">
+    <div class="hero-conteudo">
+        <h1>Soluções Completas em <span>Reparos, Construção e Coberturas</span></h1>
+        <p>Elétrica • Hidráulica • Telhados Convencionais e de Vidro • Pergolado • Manutenção Predial</p>
+        <p>Atendimento na Grande Curitiba — rápido, seguro e com garantia de qualidade.</p>
+        <div class="destaque-orcamento">💰 Orçamento Grátis • Sem compromisso! Solicite sem custo!</div>
+        <div class="hero-botoes">
+            <a href="#solicitar" class="btn btn-principal">📋 Solicitar Orçamento Grátis</a>
+            <a href="https://wa.me/5541991187943" target="_blank" class="btn btn-branco">💬 Chamar no WhatsApp</a>
+        </div>
+        <div class="selos">
+            <div class="selo"><div class="selo-icone">🛡️</div><div class="selo-nome">Garantia</div></div>
+            <div class="selo"><div class="selo-icone">✅</div><div class="selo-nome">Qualidade</div></div>
+            <div class="selo"><div class="selo-icone">⚡</div><div class="selo-nome">Agilidade</div></div>
+            <div class="selo"><div class="selo-icone">🏆</div><div class="selo-nome">Experiência</div></div>
+        </div>
+    </div>
+</section>
+
+<section id="servicos">
+    <div class="secao-titulo">
+        <h2>Nossos Serviços</h2>
+        <div class="linha"></div>
+        <p class="subtitulo">Soluções técnicas completas para sua casa ou empresa, com materiais de qualidade e execução conforme normas.</p>
+    </div>
+    <div class="servicos-grid">
+        <div class="servico-card">
+            <div class="servico-icone">⚡</div>
+            <h3>Serviços Elétricos</h3>
+            <p>Instalações e reparos em geral, seguindo rigorosamente a NBR 5410.</p>
+            <ul class="servico-detalhes">
+                <li>✓ Troca de chuveiros, tomadas e interruptores</li>
+                <li>✓ Fiação, disjuntores e quadros de distribuição</li>
+                <li>✓ Instalação de lustres, refletores e equipamentos</li>
+                <li>✓ Adequação e atualização de sistemas elétricos</li>
+                <li>✓ Laudos e verificação de segurança</li>
+            </ul>
+        </div>
+        
+        <div class="servico-card">
+            <div class="servico-icone">💧</div>
+            <h3>Serviços Hidráulicos</h3>
+            <p>Resolução de vazamentos e instalações com precisão e durabilidade.</p>
+            <ul class="servico-detalhes">
+                <li>✓ Reparo de vazamentos em tubulações e conexões</li>
+                <li>✓ Instalação de torneiras, registros e válvulas</li>
+                <li>✓ Caixas d'água, bombas e sistemas de pressurização</li>
+                <li>✓ Desentupimento e correção de esgoto</li>
+                <li>✓ Instalação e troca de louças e metais sanitários</li>
+            </ul>
+        </div>
+        
+        <div class="servico-card">
+            <div class="servico-icone">🏠</div>
+            <h3>Telhados e Coberturas</h3>
+            <p>Projetos, construção e manutenção com soluções tradicionais e modernas.</p>
+            <ul class="servico-detalhes">
+                <li>✓ Construção e reforma de telhados convencionais</li>
+                <li>✓ Reparo de infiltrações, calhas e rufos</li>
+                <li>✓ Impermeabilização de lajes e coberturas</li>
+                <li>✓ Cobertura em <strong>Vidro Temperado</strong> — segurança e iluminação natural</li>
+                <li>✓ Cobertura em <strong>Placa de Acrílico / Policarbonato</strong> — leveza e difusão de luz</li>
+                <li>✓ Projeto e instalação de <strong>Pergolado</strong> — madeira, alumínio ou estrutura mista</li>
+            </ul>
+        </div>
+        
+        <div class="servico-card">
+            <div class="servico-icone">🔧</div>
+            <h3>Manutenção Predial e Geral</h3>
+            <p>Conservação contínua e pequenas reformas para manter seu patrimônio em dia.</p>
+            <ul class="servico-detalhes">
+                <li>✓ Manutenção preventiva e corretiva</li>
+                <li>✓ Pequenas reformas e adaptações de ambientes</li>
+                <li>✓ Revestimentos, pinturas e reparos estruturais</li>
+                <li>✓ Inspeção periódica de instalações</li>
+                <li>✓ Atendimento contratual para comércios e condomínios</li>
+            </ul>
+        </div>
+    </div>
+    
+    <div class="garantia-box">
+        <h3>🛡️ Garantia de Qualidade em Todos os Serviços</h3>
+        <p>Trabalhamos com transparência, materiais certificados e cumprimento de normas técnicas. Se o serviço apresentar defeito nosso, voltamos sem custo adicional.</p>
+        <p class="garantia-destaque">Sua tranquilidade é nossa prioridade! ✅</p>
+    </div>
+</section>
+
+<section id="diferencial">
+    <div class="secao-titulo">
+        <h2>Por que escolher a BRT Soluções?</h2>
+        <div class="linha"></div>
+        <p class="subtitulo">Compromisso real com você e com o resultado final</p>
+    </div>
+    <div class="porque-grid">
+        <div class="porque-item"><div class="porque-num">1</div><div><h4>Orçamento Grátis e Sem Compromisso</h4><p style="color:var(--texto-claro);font-size:.95rem">Vamos até você, avaliamos e apresentamos o valor detalhado — sem surpresas.</p></div></div>
+        <div class="porque-item"><div class="porque-num">2</div><div><h4>Preço Justo e Transparente</h4><p style="color:var(--texto-claro);font-size:.95rem">Valor combinado, discriminado e sem cobranças extras depois de fechado.</p></div></div>
+        <div class="porque-item"><div class="porque-num">3</div><div><h4>Técnico Qualificado</h4><p style="color:var(--texto-claro);font-size:.95rem">Profissional experiente, treinado e cuidadoso com sua casa e pertences.</p></div></div>
+        <div class="porque-item"><div class="porque-num">4</div><div><h4>Atendimento Rápido</h4><p style="color:var(--texto-claro);font-size:.95rem">Agilidade no atendimento, especialmente em casos de emergência.</p></div></div>
+        <div class="porque-item"><div class="porque-num">5</div><div><h4>Serviço com Garantia</h4><p style="color:var(--texto-claro);font-size:.95rem">Ficou com defeito? Voltamos sem custo adicional. Sua satisfação é nossa meta.</p></div></div>
+        <div class="porque-item"><div class="porque-num">6</div><div><h4>Atendimento Local</h4><p style="color:var(--texto-claro);font-size:.95rem">Moramos e trabalhamos na região — pertinho de você quando precisar.</p></div></div>
+    </div>
+</section>
+
+<section id="atendimento">
+    <div class="secao-titulo">
+        <h2>Área de Atendimento</h2>
+        <div class="linha"></div>
+        <p class="subtitulo">Atendemos toda a Grande Curitiba e Região Metropolitana</p>
+    </div>
+    <div class="regioes-lista">
+        <span class="regiao-tag">📍 Curitiba</span>
+        <span class="regiao-tag">📍 São José dos Pinhais</span>
+        <span class="regiao-tag">📍 Pinhais</span>
+        <span class="regiao-tag">📍 Colombo</span>
+        <span class="regiao-tag">📍 Araucária</span>
+        <span class="regiao-tag">📍 Fazenda Rio Grande</span>
+    </div>
+    <p style="text-align:center;margin-top:2rem;color:var(--texto-claro)">Não encontrou sua cidade? <a href="https://wa.me/5541991187943" target="_blank" style="color:var(--primario);font-weight:600">Chama no WhatsApp</a> que verificamos a possibilidade de atendimento! 💬</p>
+</section>
+
+<section id="solicitar">
+    <div class="secao-titulo">
+        <h2>Solicitar Orçamento Grátis</h2>
+        <div class="linha"></div>
+        <p class="subtitulo">Preencha o formulário e entraremos em contato em breve para avaliar seu atendimento</p>
+    </div>
+    <div class="form-container">
+        <form id="formCliente">
+            <div class="form-grupo"><label for="nome">Nome Completo *</label><input type="text" id="nome" placeholder="Digite seu nome completo" required></div>
+            <div class="form-grupo"><label for="telefone">WhatsApp com DDD *</label><input type="tel" id="telefone" placeholder="(41) 9XXXX-XXXX" required></div>
+            <div class="form-grupo"><label for="email">E-mail</label><input type="email" id="email" placeholder="seuemail@exemplo.com"></div>
+            <div class="form-grupo"><label for="endereco">Endereço Completo *</label><input type="text" id="endereco" placeholder="Rua, número, bairro, cidade - PR" required></div>
+            <div class="form-grupo">
+                <label for="servico">Tipo de Serviço *</label>
+                <select id="servico" required>
+                    <option value="">Selecione...</option>
+                    <option value="eletrico">⚡ Elétrico</option>
+                    <option value="hidraulico">💧 Hidráulico</option>
+                    <option value="telhado">🏠 Telhado Convencional</option>
+                    <option value="vidro">🪟 Cobertura de Vidro Temperado</option>
+                    <option value="acrilico">⬜ Cobertura de Acrílico / Policarbonato</option>
+                    <option value="pergolado">🌿 Pergolado</option>
+                    <option value="manutencao">🔧 Manutenção Predial / Geral</option>
+                    <option value="outro">📝 Outro</option>
+                </select>
+            </div>
+            <div class="form-grupo"><label for="descricao">Descrição do Problema / Serviço Desejado</label><textarea id="descricao" rows="4" placeholder="Ex: Vazamento na cozinha, tomada queimada, telhado com goteira, desejo cobertura de vidro na área de lazer..."></textarea></div>
+            <div class="form-grupo">
+                <label for="pagamento">Forma de Pagamento Preferida</label>
+                <select id="pagamento">
+                    <option value="">Escolha...</option>
+                    <option value="dinheiro">Dinheiro</option>
+                    <option value="pix">PIX</option>
+                    <option value="cartao">Cartão de Crédito/Débito</option>
+                    <option value="combinar">A combinar após orçamento</option>
+                </select>
+            </div>
+            <button type="submit" id="btnEnviar">📤 Enviar Solicitação</button>
+            <div id="msgForm" class="mensagem"></div>
+        </form>
+    </div>
+</section>
+
+<section id="sobre">
+    <div class="secao-titulo">
+        <h2>Sobre Nós</h2>
+        <div class="linha"></div>
+    </div>
+    <div style="max-width:800px;margin:0 auto;background:white;padding:2.5rem;border-radius:16px;box-shadow:var(--sombra)">
+        <h3 style="color:var(--primario);margin-bottom:1rem">BRT Soluções • Conserto Certo</h3>
+        <p style="margin-bottom:1rem">Somos uma empresa focada em serviços de reparo, manutenção e construção com qualidade, transparência e agilidade. Atuamos na Grande Curitiba e região, levando soluções seguras e duradouras para residências e comércios.</p>
+        <p style="margin-bottom:1rem">Cada serviço é realizado com dedicação, usando materiais certificados e seguindo normas técnicas, garantindo sua tranquilidade e a durabilidade que você merece. Da troca de uma tomada à construção de coberturas especiais, tratamos cada projeto com o mesmo cuidado e profissionalismo.</p>
+        <p style="margin-bottom:1rem"><strong>⏰ Horário de Atendimento:</strong><br>Segunda a Sexta: 8h às 18h<br>Sábado: 8h às 13h<br><em>Atendimento emergencial disponível — ligue e consulte!</em></p>
+        <p><strong>📞 Contato:</strong> <a href="tel:+5541991187943" style="color:var(--primario);font-weight:600">(41) 99118-7943</a><br>
+        <strong>✉️ E-mail:</strong> <a href="mailto:ipbisaque@gmail.com" style="color:var(--primario);font-weight:600">ipbisaque@gmail.com</a></p>
+    </div>
+</section>
+
+<section id="entrar">
+    <div class="secao-titulo">
+        <h2>Acesso Restrito</h2>
+        <div class="linha"></div>
+        <p class="subtitulo">Apenas Administrador e Profissionais Cadastrados</p>
+    </div>
+    <div class="form-container">
+        <form id="formLogin">
+            <div class="form-grupo"><label for="emailLogin">E-mail</label><input type="email" id="emailLogin" placeholder="seuemail@exemplo.com" required></div>
+            <div class="form-grupo"><label for="senhaLogin">Senha</label><input type="password" id="senhaLogin" placeholder="Sua senha" required></div>
+            <button type="submit" id="btnLogin">🔐 Entrar</button>
+            <div id="msgLogin" class="mensagem"></div>
+        </form>
+    </div>
+</section>
+
+<section id="admin" class="painel">
+    <div class="cabecalho-admin">
+        <h2 style="color:var(--primario)">Painel Administrativo</h2>
+        <button class="btn-sair" onclick="sair()">🚪 Sair</button>
+    </div>
+    <h3 style="margin:2rem 0 1rem">📋 Solicitações Recebidas</h3>
+    <div id="listaSolicitacoes"><p style="text-align:center;color:var(--texto-claro);padding:2rem">Carregando...</p></div>
+    <h3 style="margin:3rem 0 1rem">👥 Cadastrar Profissional</h3>
+    <div class="form-container" style="max-width:500px">
+        <form id="formProfissional">
+            <div class="form-grupo"><label for="nomeProf">Nome Completo</label><input type="text" id="nomeProf" placeholder="Nome do profissional" required></div>
+            <div class="form-grupo"><label for="emailProf">E-mail de Acesso</label><input type="email" id="emailProf" placeholder="email@exemplo.com" required></div>
+            <button type="submit">✅ Cadastrar Profissional</button>
+            <div id="msgProf" class="mensagem"></div>
+        </form>
+    </div>
+</section>
+
+<footer>
+    <div class="rodape-container">
+        <div class="rodape-col"><h3>BRT Soluções • Conserto Certo</h3><p>Soluções em reparos, manutenção e construção para sua casa e empresa.</p><p style="margin-top:.5rem">Qualidade • Transparência • Garantia</p></div>
+        <div class="rodape-col">
+            <h3>Contato</h3>
+            <p>📱 WhatsApp: <a href="https://wa.me/5541991187943" target="_blank">(41) 99118-7943</a></p>
+            <p>📞 Telefone: <a href="tel:+5541991187943">(41) 99118-7943</a></p>
+            <p>✉️ E-mail: <a href="mailto:ipbisaque@gmail.com">ipbisaque@gmail.com</a></p>
+        </div>
+        <div class="rodape-col"><h3>Atendimento</h3><p>Grande Curitiba e Região Metropolitana</p><p>Seg a Sex: 8h às 18h</p><p>Sáb: 8h às 13h</p><p style="margin-top:.5rem;color:var(--destaque)">🚨 Emergência: ligue agora!</p></div>
+    </div>
+    <div class="rodape-baixo">
+        <p>© 2026 BRT Soluções • Conserto Certo — Todos os direitos reservados.</p>
+    </div>
+</footer>
 
 <script>
-/* ===================== DATA ===================== */
-const CITIES_DEFAULT = ["Curitiba","São José dos Pinhais","Colombo","Pinhais","Araucária","Campo Largo","Fazenda Rio Grande","Almirante Tamandaré","Piraquara"];
-const API = "/api";
-
-const SERVICES = [
-  { id:"eletrica", nome:"Instalações e reparos elétricos", desc:"Curto-circuito, disjuntores, fiação, pontos de luz e quadros de energia.", icon:iconBolt() },
-  { id:"hidraulica", nome:"Instalações e reparos hidráulicos", desc:"Vazamentos, entupimentos, registros e tubulações.", icon:iconDrop() },
-  { id:"telhado-reparo", nome:"Reparo de telhado", desc:"Goteiras, telhas quebradas e calhas entupidas.", icon:iconRoof() },
-  { id:"telhado-novo", nome:"Construção de telhado novo", desc:"Estrutura e cobertura nova, sob medida.", icon:iconRoof() },
-  { id:"cobertura-vidro-acrilico", nome:"Cobertura em vidro temperado ou acrílico", desc:"Execução de coberturas e claraboias com vidro temperado laminado ou chapas de acrílico, incluindo estrutura de fixação e calhas.", icon:iconGlassRoof() },
-  { id:"pergolado", nome:"Construção de pergolado", desc:"Estruturas de pergolado em madeira, aço ou alumínio para áreas externas, varandas e garagens, com ou sem fechamento.", icon:iconPergola() },
-  { id:"chuveiro-tomada", nome:"Troca de chuveiros e tomadas", desc:"Substituição rápida e segura de chuveiros, tomadas e interruptores.", icon:iconPlug() },
-  { id:"manutencao-predial", nome:"Manutenção predial geral", desc:"Pequenos reparos e manutenção preventiva do imóvel.", icon:iconTool() },
-];
-
-function iconGlassRoof(){return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12L12 4l9 8"/><path d="M6 11v9h12v-9"/><path d="M12 4v16M6 15h12"/></svg>';}
-function iconPergola(){return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7h18"/><path d="M5 7v13M19 7v13"/><path d="M8 7v4M11.3 7v4M14.7 7v4M18 7v4"/></svg>';}
-function iconBolt(){return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>';}
-function iconDrop(){return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2s6 7 6 12a6 6 0 01-12 0c0-5 6-12 6-12z"/></svg>';}
-function iconRoof(){return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12L12 4l9 8"/><path d="M5 11v9h14v-9"/></svg>';}
-function iconPlug(){return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 2v6M15 2v6M7 8h10v4a5 5 0 01-10 0V8z"/><path d="M12 17v5"/></svg>';}
-function iconTool(){return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14.7 6.3a1 1 0 010 1.4l-7 7a1 1 0 01-1.4 0l-2-2a1 1 0 010-1.4l7-7a1 1 0 011.4 0z"/><path d="M16 8l2-2M2 22l4-1 9-9-3-3-9 9z"/></svg>';}
-
-/* ===================== SHARED STATE (server + local-cache fallback) ===================== */
-const DEFAULT_STATE = {
-  professionals: [{ nome:"Profissional responsável", tel:"41991187943", esp:"Elétrica, hidráulica e manutenção geral", pin:"0000" }],
-  requests: [],
-  config: { whatsapp:"5541991187943", pix:"", cidades: CITIES_DEFAULT.join(", "), horario: "Seg a Sáb, 8h às 18h" }
+const firebaseConfig = {
+  apiKey: "COLE_SUA_API_KEY_AQUI",
+  authDomain: "SEU_PROJETO.firebaseapp.com",
+  projectId: "SEU_PROJETO",
+  storageBucket: "SEU_PROJETO.appspot.com",
+  messagingSenderId: "XXXXXX",
+  appId: "1:XXXXXX:web:XXXXXX"
 };
-let STATE = JSON.parse(JSON.stringify(DEFAULT_STATE));
-let ONLINE = false;
 
-function cacheState(){ try{ localStorage.setItem("brt_cache", JSON.stringify(STATE)); }catch(e){} }
-function loadCache(){ try{ const v = localStorage.getItem("brt_cache"); return v ? JSON.parse(v) : null; }catch(e){ return null; } }
+firebase.initializeApp(firebaseConfig);
+const auth = firebase.auth();
+const db = firebase.firestore();
 
-async function loadState(){
-  try{
-    const r = await fetch(API, { cache:"no-store" });
-    if(!r.ok) throw new Error("bad response");
-    STATE = await r.json();
-    ONLINE = true;
-    cacheState();
-  }catch(e){
-    ONLINE = false;
-    STATE = loadCache() || JSON.parse(JSON.stringify(DEFAULT_STATE));
-  }
-  renderAll();
-}
+const menuBtn = document.getElementById('menuBtn');
+const menuNav = document.getElementById('menuNav');
+const admItem = document.getElementById('adm-item');
 
-function renderAll(){
-  renderServices();
-  refreshCurrentList();
-  if(document.getElementById("screen-login-pro").classList.contains("active")) renderProSelect();
-}
+menuBtn.addEventListener('click', () => menuNav.classList.toggle('aberto'));
+document.querySelectorAll('.link-nav').forEach(link => {
+    link.addEventListener('click', () => menuNav.classList.remove('aberto'));
+});
 
-/* ===================== NAV ===================== */
-let currentRole = null; // {type:'pro'|'admin', nome}
-let preselectedService = "";
-
-function goTo(screen){
-  document.querySelectorAll(".screen").forEach(s=>s.classList.remove("active"));
-  document.getElementById("screen-"+screen).classList.add("active");
-  document.querySelectorAll(".tab").forEach(t=>t.classList.remove("active"));
-  const mainTabs = ["home","servicos","cadastro","perfil"];
-  if(mainTabs.includes(screen)){
-    document.querySelector(`.tab[data-tab="${screen}"]`).classList.add("active");
-  }
-  if(screen === "login-pro") renderProSelect();
-  if(screen === "admin-panel") renderAdminPanel();
-  if(screen === "pro-panel") renderProPanel();
-  window.scrollTo(0,0);
-}
-
-function toast(msg){
-  const t = document.getElementById("toast");
-  t.textContent = msg;
-  t.classList.add("show");
-  setTimeout(()=>t.classList.remove("show"), 2600);
-}
-
-/* ===================== HOME + SERVICE RENDER ===================== */
-function renderServices(){
-  const horarioBadge = document.getElementById("horarioBadge");
-  if(horarioBadge) horarioBadge.lastChild.nodeType === 3
-    ? horarioBadge.lastChild.textContent = (STATE.config.horario || "")
-    : horarioBadge.appendChild(document.createTextNode(STATE.config.horario || ""));
-
-  const grid = document.getElementById("homeSvcGrid");
-  grid.innerHTML = SERVICES.map(s => `
-    <div class="svc-tile" onclick="requestService('${s.id}')">
-      <div class="ic">${s.icon}</div>
-      <div class="t">${s.nome}</div>
-    </div>`).join("");
-
-  const list = document.getElementById("svcList");
-  list.innerHTML = SERVICES.map(s => `
-    <div class="svc-card">
-      <div class="ic">${s.icon}</div>
-      <div class="body">
-        <h3>${s.nome}</h3>
-        <p>${s.desc}</p>
-        <button class="btn btn-primary btn-sm" onclick="requestService('${s.id}')">Solicitar este serviço</button>
-      </div>
-    </div>`).join("");
-
-  const cidadeSel = document.getElementById("f-cidade");
-  const cidades = (STATE.config.cidades || CITIES_DEFAULT.join(", ")).split(",").map(c=>c.trim()).filter(Boolean);
-  const prevCidade = cidadeSel.value;
-  cidadeSel.innerHTML = '<option value="">Selecione a cidade</option>' + cidades.map(c=>`<option value="${c}">${c}</option>`).join("");
-  if(prevCidade) cidadeSel.value = prevCidade;
-
-  const svcSel = document.getElementById("f-servico");
-  const prevSvc = svcSel.value;
-  svcSel.innerHTML = '<option value="">Selecione o serviço</option>' + SERVICES.map(s=>`<option value="${s.nome}">${s.nome}</option>`).join("");
-  if(prevSvc) svcSel.value = prevSvc;
-}
-
-function requestService(id){
-  const s = SERVICES.find(x=>x.id===id);
-  preselectedService = s ? s.nome : "";
-  goTo("cadastro");
-  setTimeout(()=>{
-    document.getElementById("f-servico").value = preselectedService;
-  }, 30);
-}
-
-/* ===================== CADASTRO ===================== */
-function maskPhone(el){
-  let v = el.value.replace(/\D/g, "").slice(0, 11);
-  if(v.length > 6){
-    el.value = `(${v.slice(0,2)}) ${v.slice(2,7)}-${v.slice(7)}`;
-  } else if(v.length > 2){
-    el.value = `(${v.slice(0,2)}) ${v.slice(2)}`;
-  } else if(v.length > 0){
-    el.value = `(${v}`;
-  } else {
-    el.value = "";
-  }
-}
-
-let fotoBase64 = "";
-
-function handlePhotoSelect(event){
-  const file = event.target.files[0];
-  if(!file) return;
-  if(!file.type.startsWith("image/")){
-    toast("Selecione um arquivo de imagem.");
-    return;
-  }
-  const reader = new FileReader();
-  reader.onload = (e) => {
-    const img = new Image();
-    img.onload = () => {
-      const maxW = 900;
-      const scale = Math.min(1, maxW / img.width);
-      const canvas = document.createElement("canvas");
-      canvas.width = img.width * scale;
-      canvas.height = img.height * scale;
-      const ctx = canvas.getContext("2d");
-      ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-      fotoBase64 = canvas.toDataURL("image/jpeg", 0.6);
-      document.getElementById("fotoPreview").src = fotoBase64;
-      document.getElementById("fotoPreviewBox").style.display = "block";
-    };
-    img.src = e.target.result;
-  };
-  reader.readAsDataURL(file);
-}
-
-function clearPhoto(){
-  fotoBase64 = "";
-  document.getElementById("f-foto").value = "";
-  document.getElementById("fotoPreviewBox").style.display = "none";
-}
-
-async function submitCadastro(){
-  const nome = document.getElementById("f-nome").value.trim();
-  const tel = document.getElementById("f-tel").value.trim();
-  const cidade = document.getElementById("f-cidade").value;
-  const endereco = document.getElementById("f-endereco").value.trim();
-  const servico = document.getElementById("f-servico").value;
-  const desc = document.getElementById("f-desc").value.trim();
-  const horario = document.getElementById("f-horario").value;
-  const hp = document.getElementById("f-hp").value.trim();
-
-  const required = { "f-nome": nome, "f-tel": tel, "f-cidade": cidade, "f-servico": servico };
-  let hasError = false;
-  Object.entries(required).forEach(([id, val]) => {
-    const el = document.getElementById(id);
-    if(!val){ el.style.borderColor = "var(--red)"; hasError = true; }
-    else { el.style.borderColor = ""; }
-  });
-  if(hasError){
-    toast("Preencha nome, telefone, cidade e serviço.");
-    return;
-  }
-
-  const telDigits = tel.replace(/\D/g, "");
-  if(telDigits.length < 10 || telDigits.length > 11){
-    document.getElementById("f-tel").style.borderColor = "var(--red)";
-    toast("Confira o telefone — precisa ter DDD + número completo.");
-    return;
-  }
-
-  const submitBtn = document.getElementById("submitBtn");
-  const originalLabel = submitBtn.innerHTML;
-  submitBtn.disabled = true;
-  submitBtn.style.opacity = "0.7";
-  submitBtn.innerHTML = "Enviando...";
-
-  const localReq = {
-    id: Date.now().toString(),
-    nome, tel, cidade, endereco, servico, desc, horario, foto: fotoBase64,
-    status:"Novo", pago:false, criadoEm: new Date().toISOString()
-  };
-
-  try{
-    const r = await fetch(`${API}/requests`, {
-      method:"POST",
-      headers:{ "Content-Type":"application/json" },
-      body: JSON.stringify({ nome, tel, cidade, endereco, servico, desc, horario, foto: fotoBase64, website: hp })
+document.querySelectorAll('a[href^="#"]').forEach(a => {
+    a.addEventListener('click', e => {
+        e.preventDefault();
+        document.querySelector(a.getAttribute('href')).scrollIntoView({behavior: 'smooth'});
     });
-    if(!r.ok) throw new Error("fail");
-    const data = await r.json();
-    STATE.requests.unshift(data.item);
-    ONLINE = true;
-  }catch(e){
-    STATE.requests.unshift(localReq);
-    ONLINE = false;
-  }
-  cacheState();
+});
 
-  const msg = `Olá! Vim pelo app *BRT Soluções - Conserto Certo*.%0A%0A*Nome:* ${nome}%0A*Cidade:* ${cidade}%0A*Endereço/Bairro:* ${endereco || "-"}%0A*Serviço:* ${servico}%0A*Descrição:* ${desc || "-"}%0A*Melhor horário:* ${horario}`;
-  const wa = `https://wa.me/${STATE.config.whatsapp}?text=${msg}`;
-  window.open(wa, "_blank");
-
-  submitBtn.disabled = false;
-  submitBtn.style.opacity = "1";
-  submitBtn.innerHTML = originalLabel;
-
-  document.getElementById("cadastroForm").style.display = "none";
-  document.getElementById("cadastroSuccess").style.display = "block";
-}
-
-function resetCadastro(){
-  ["f-nome","f-tel","f-endereco","f-desc"].forEach(id=>document.getElementById(id).value="");
-  document.getElementById("f-cidade").value="";
-  document.getElementById("f-servico").value="";
-  ["f-nome","f-tel","f-cidade","f-servico"].forEach(id=>document.getElementById(id).style.borderColor="");
-  clearPhoto();
-  document.getElementById("cadastroForm").style.display = "block";
-  document.getElementById("cadastroSuccess").style.display = "none";
-}
-
-/* ===================== LOGIN: PROFISSIONAL ===================== */
-function renderProSelect(){
-  const sel = document.getElementById("pro-nome");
-  const hasAny = STATE.professionals.length > 0;
-  document.getElementById("proLoginEmpty").style.display = hasAny ? "none" : "block";
-  document.getElementById("proLoginForm").style.display = hasAny ? "block" : "none";
-  sel.innerHTML = STATE.professionals.map((p,i)=>`<option value="${i}">${p.nome}</option>`).join("");
-  document.getElementById("proLoginErr").style.display = "none";
-  document.getElementById("pro-pin").value = "";
-}
-
-async function loginProfissional(){
-  const idx = document.getElementById("pro-nome").value;
-  const pin = document.getElementById("pro-pin").value.trim();
-  const errEl = document.getElementById("proLoginErr");
-  errEl.style.display = "none";
-  try{
-    const r = await fetch(`${API}/pro-login`, {
-      method:"POST", headers:{ "Content-Type":"application/json" },
-      body: JSON.stringify({ idx, pin })
-    });
-    const data = await r.json();
-    if(r.ok && data.ok){
-      currentRole = { type:"pro", nome:data.nome };
-      goTo("pro-panel");
-      return;
+document.getElementById('formCliente').addEventListener('submit', async e => {
+    e.preventDefault();
+    const btn = document.getElementById('btnEnviar');
+    const msg = document.getElementById('msgForm');
+    btn.disabled = true;
+    btn.textContent = 'Enviando...';
+    msg.className = 'mensagem';
+    try {
+        await db.collection('solicitacoes').add({
+            nome: document.getElementById('nome').value.trim(),
+            telefone: document.getElementById('telefone').value.trim(),
+            email: document.getElementById('email').value.trim() || 'Não informado',
+            endereco: document.getElementById('endereco').value.trim(),
+            servico: document.getElementById('servico').value,
+            descricao: document.getElementById('descricao').value.trim() || 'Não informada',
+            pagamento: document.getElementById('pagamento').value || 'A combinar',
+            data: firebase.firestore.FieldValue.serverTimestamp(),
+            status: 'pendente'
+        });
+        msg.className = 'mensagem sucesso';
+        msg.textContent = '✅ Enviado! Entraremos em contato em breve com seu orçamento grátis.';
+        e.target.reset();
+    } catch (erro) {
+        msg.className = 'mensagem erro';
+        msg.textContent = '❌ Erro: ' + erro.message;
+    } finally {
+        btn.disabled = false;
+        btn.textContent = '📤 Enviar Solicitação';
     }
-  }catch(e){
-    // Offline fallback: only works if this device already cached the (unsafe) local copy.
-    const p = STATE.professionals[idx];
-    if(p && p.pin && p.pin === pin){
-      currentRole = { type:"pro", nome:p.nome };
-      goTo("pro-panel");
-      return;
+});
+
+document.getElementById('formLogin').addEventListener('submit', async e => {
+    e.preventDefault();
+    const btn = document.getElementById('btnLogin');
+    const msg = document.getElementById('msgLogin');
+    btn.disabled = true;
+    btn.textContent = 'Entrando...';
+    msg.className = 'mensagem';
+    try {
+        await auth.signInWithEmailAndPassword(
+            document.getElementById('emailLogin').value,
+            document.getElementById('senhaLogin').value
+        );
+    } catch (erro) {
+        msg.className = 'mensagem erro';
+        msg.textContent = '❌ ' + erro.message;
+    } finally {
+        btn.disabled = false;
+        btn.textContent = '🔐 Entrar';
     }
-  }
-  errEl.style.display = "block";
-}
+});
 
-function renderProPanel(){
-  document.getElementById("proWelcome").textContent = `Olá, ${currentRole ? currentRole.nome : ""}. Veja abaixo os atendimentos.`;
-  renderRequestList("proReqList", true);
-}
-
-/* ===================== LOGIN: ADMIN ===================== */
-let adminToken = null;
-
-async function loginAdmin(){
-  const email = document.getElementById("admin-email").value.trim().toLowerCase();
-  const errEl = document.getElementById("adminLoginErr");
-  errEl.style.display = "none";
-  try{
-    const r = await fetch(`${API}/admin-login`, {
-      method:"POST", headers:{ "Content-Type":"application/json" },
-      body: JSON.stringify({ email })
-    });
-    const data = await r.json();
-    if(r.ok && data.ok){
-      adminToken = data.token;
-      currentRole = { type:"admin", nome:"Administrador" };
-      goTo("admin-panel");
-      return;
-    }
-  }catch(e){ /* fall through to error */ }
-  errEl.style.display = "block";
-}
-
-function logoutRole(){
-  currentRole = null;
-  adminToken = null;
-  goTo("perfil");
-}
-
-/* ===================== ADMIN PANEL ===================== */
-function renderAdminPanel(){
-  renderRequestList("adminReqList", true);
-  document.getElementById("reqCount").textContent = STATE.requests.length;
-
-  document.getElementById("proManageList").innerHTML = STATE.professionals.map((p,i)=>`
-    <div class="list-manage-item">
-      <div>
-        <div class="t">${p.nome}</div>
-        <div class="s">${p.esp || "—"} ${p.tel ? "· " + p.tel : ""} · PIN <span id="pin-${i}" style="cursor:pointer;text-decoration:underline dotted;" onclick="togglePinVisibility(${i})">••••</span></div>
-      </div>
-      <button class="icon-btn" aria-label="Remover profissional" onclick="removeProfissional(${i})">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6"/></svg>
-      </button>
-    </div>`).join("") || `<p style="font-size:12.5px;color:var(--muted);">Nenhum profissional cadastrado ainda.</p>`;
-
-  document.getElementById("cfg-whatsapp").value = STATE.config.whatsapp || "";
-  document.getElementById("cfg-horario").value = STATE.config.horario || "";
-  document.getElementById("cfg-pix").value = STATE.config.pix || "";
-  document.getElementById("cfg-cidades").value = STATE.config.cidades || CITIES_DEFAULT.join(", ");
-
-  const syncNote = document.getElementById("syncNote");
-  if(syncNote) syncNote.textContent = ONLINE ? "Sincronizado — visível em todos os aparelhos." : "Offline — mudanças salvas só neste aparelho até reconectar.";
-}
-
-async function shareApp(){
-  const shareData = {
-    title: "BRT Soluções — Conserto Certo",
-    text: "Elétrica, hidráulica, telhados e manutenção predial na Grande Curitiba. Peça seu orçamento:",
-    url: window.location.origin
-  };
-  try{
-    if(navigator.share){
-      await navigator.share(shareData);
+auth.onAuthStateChanged(usuario => {
+    const painel = document.getElementById('admin');
+    if (usuario && usuario.email === 'ipbisaque@gmail.com') {
+        admItem.classList.remove('oculto');
+        painel.classList.add('ativo');
+        carregarSolicitacoes();
     } else {
-      await navigator.clipboard.writeText(shareData.url);
-      toast("Link copiado! Cole numa conversa pra compartilhar.");
+        admItem.classList.add('oculto');
+        painel.classList.remove('ativo');
     }
-  }catch(e){ /* user cancelled share, ignore */ }
-}
-
-async function togglePinVisibility(i){
-  const el = document.getElementById(`pin-${i}`);
-  if(!el) return;
-  if(el.textContent !== "••••"){
-    el.textContent = "••••";
-    return;
-  }
-  el.textContent = "...";
-  try{
-    const r = await fetch(`${API}/admin/professionals`, {
-      method:"POST", headers:{ "Content-Type":"application/json" },
-      body: JSON.stringify({ adminToken })
-    });
-    const data = await r.json();
-    el.textContent = (r.ok && data.professionals[i]) ? data.professionals[i].pin : "erro";
-  }catch(e){
-    el.textContent = "offline";
-  }
-}
-
-async function addProfissional(){
-  const nome = document.getElementById("new-pro-nome").value.trim();
-  const tel = document.getElementById("new-pro-tel").value.trim();
-  const esp = document.getElementById("new-pro-esp").value.trim();
-  const pin = document.getElementById("new-pro-pin").value.trim();
-  if(!nome || !pin){ toast("Informe nome e PIN do profissional."); return; }
-  try{
-    const r = await fetch(`${API}/professionals`, {
-      method:"POST", headers:{ "Content-Type":"application/json" },
-      body: JSON.stringify({ nome, tel, esp, pin, adminToken })
-    });
-    if(!r.ok) throw new Error("fail");
-    const data = await r.json();
-    STATE.professionals = data.professionals;
-  }catch(e){
-    STATE.professionals.push({ nome, tel, esp, pin });
-    toast("Sem conexão: profissional salvo só neste aparelho.");
-  }
-  cacheState();
-  ["new-pro-nome","new-pro-tel","new-pro-esp","new-pro-pin"].forEach(id=>document.getElementById(id).value="");
-  renderAdminPanel();
-  toast("Profissional adicionado.");
-}
-
-async function removeProfissional(i){
-  const p = STATE.professionals[i];
-  if(!p) return;
-  const sure = confirm(`Remover "${p.nome}"? Ele(a) não vai mais conseguir entrar no app com o PIN atual.`);
-  if(!sure) return;
-  try{
-    const r = await fetch(`${API}/professionals/${i}`, {
-      method:"DELETE", headers:{ "Content-Type":"application/json" },
-      body: JSON.stringify({ adminToken })
-    });
-    if(!r.ok) throw new Error("fail");
-    const data = await r.json();
-    STATE.professionals = data.professionals;
-  }catch(e){
-    STATE.professionals.splice(i,1);
-  }
-  cacheState();
-  renderAdminPanel();
-  toast(`${p.nome} removido.`);
-}
-
-async function saveConfig(){
-  const whatsapp = document.getElementById("cfg-whatsapp").value.trim();
-  const horario = document.getElementById("cfg-horario").value.trim();
-  const pix = document.getElementById("cfg-pix").value.trim();
-  const cidades = document.getElementById("cfg-cidades").value.trim();
-  try{
-    const r = await fetch(`${API}/config`, {
-      method:"POST", headers:{ "Content-Type":"application/json" },
-      body: JSON.stringify({ whatsapp, horario, pix, cidades, adminToken })
-    });
-    if(!r.ok) throw new Error("fail");
-    const data = await r.json();
-    STATE.config = data.config;
-    toast("Configurações salvas e sincronizadas.");
-  }catch(e){
-    STATE.config = { whatsapp, horario, pix, cidades };
-    toast("Sem conexão: salvo só neste aparelho.");
-  }
-  cacheState();
-  renderServices();
-}
-
-/* ===================== REQUEST LIST (shared render) ===================== */
-function renderRequestList(containerId, editable){
-  const el = document.getElementById(containerId);
-  if(!el) return;
-  const reqs = STATE.requests;
-  if(reqs.length === 0){
-    el.innerHTML = `<div class="empty-state">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M9 7h6M9 11h6M9 15h4"/></svg>
-      <p>Nenhuma solicitação por aqui ainda.</p>
-    </div>`;
-    return;
-  }
-  el.innerHTML = reqs.map(r => `
-    <div class="req-item">
-      <div class="top-row">
-        <div>
-          <div class="name">${r.nome}</div>
-          <div class="meta">${r.servico} · ${r.cidade}</div>
-        </div>
-        <span class="pill ${pillClass(r.status)}">${r.status}</span>
-      </div>
-      ${r.desc ? `<div class="desc">${r.desc}</div>` : ""}
-      ${r.foto ? `<img src="${r.foto}" onclick="window.open('${r.foto.replace(/'/g, "\\'")}','_blank')" style="width:72px;height:72px;object-fit:cover;border-radius:8px;margin-top:8px;border:1px solid var(--line);cursor:pointer;" alt="Foto do problema">` : ""}
-      <div class="meta" style="margin-top:6px;">📞 ${r.tel || "—"} · ${new Date(r.criadoEm).toLocaleDateString('pt-BR')}</div>
-      ${editable ? `
-      <div class="req-actions">
-        <select class="status-select" onchange="updateStatus('${r.id}', this.value)">
-          ${["Novo","Em andamento","Concluído"].map(st=>`<option value="${st}" ${r.status===st?"selected":""}>${st}</option>`).join("")}
-        </select>
-        <button class="btn btn-sm ${r.pago ? 'btn-ghost' : 'btn-dark'}" onclick="togglePago('${r.id}')">${r.pago ? "✓ Pago" : "Marcar como pago"}</button>
-        ${r.tel ? `<button class="btn btn-sm btn-wa" onclick="contactClient('${r.id}')">WhatsApp</button>` : ""}
-      </div>` : ""}
-    </div>`).join("");
-}
-
-function pillClass(status){
-  if(status === "Concluído") return "pill-done";
-  if(status === "Em andamento") return "pill-progress";
-  return "pill-new";
-}
-
-async function updateStatus(id, status){
-  const r = STATE.requests.find(x=>x.id===id);
-  if(r) r.status = status;
-  cacheState();
-  refreshCurrentList();
-  try{
-    await fetch(`${API}/requests/${id}`, {
-      method:"PATCH", headers:{ "Content-Type":"application/json" },
-      body: JSON.stringify({ status })
-    });
-  }catch(e){ /* stays local until next sync */ }
-}
-
-async function togglePago(id){
-  const r = STATE.requests.find(x=>x.id===id);
-  if(!r) return;
-  r.pago = !r.pago;
-  cacheState();
-  refreshCurrentList();
-  try{
-    await fetch(`${API}/requests/${id}`, {
-      method:"PATCH", headers:{ "Content-Type":"application/json" },
-      body: JSON.stringify({ pago: r.pago })
-    });
-  }catch(e){ /* stays local until next sync */ }
-}
-
-function contactClient(id){
-  const r = STATE.requests.find(x=>x.id===id);
-  if(!r) return;
-  const digits = r.tel.replace(/\D/g,"");
-  window.open(`https://wa.me/${digits}`, "_blank");
-}
-
-function refreshCurrentList(){
-  if(document.getElementById("screen-admin-panel").classList.contains("active")) renderAdminPanel();
-  if(document.getElementById("screen-pro-panel").classList.contains("active")) renderProPanel();
-}
-
-loadState();
-
-const urlParams = new URLSearchParams(window.location.search);
-if(urlParams.get("atalho") === "cadastro"){
-  setTimeout(() => goTo("cadastro"), 50);
-}
-
-/* ===================== INSTALL PROMPT (Android/Chrome) ===================== */
-let deferredPrompt;
-window.addEventListener("beforeinstallprompt", (e)=>{
-  e.preventDefault();
-  deferredPrompt = e;
-  if(!localStorage.getItem("brt_install_dismissed")){
-    document.getElementById("installBanner").style.display = "flex";
-  }
-});
-document.getElementById("installBtn").addEventListener("click", async ()=>{
-  document.getElementById("installBanner").style.display = "none";
-  if(deferredPrompt){ deferredPrompt.prompt(); await deferredPrompt.userChoice; deferredPrompt = null; }
-});
-document.getElementById("dismissInstall").addEventListener("click", ()=>{
-  document.getElementById("installBanner").style.display = "none";
-  localStorage.setItem("brt_install_dismissed","1");
 });
 
-if("serviceWorker" in navigator){
-  window.addEventListener("load", ()=>{
-    navigator.serviceWorker.register("sw.js").catch(()=>{});
-  });
+async function atualizarStatus(id, novoStatus) {
+    try {
+        await db.collection('solicitacoes').doc(id).update({ status: novoStatus });
+        carregarSolicitacoes();
+    } catch (erro) {
+        alert('Erro: ' + erro.message);
+    }
 }
+
+async function carregarSolicitacoes() {
+    const lista = document.getElementById('listaSolicitacoes');
+    lista.innerHTML = '<p style="text-align:center;color:var(--texto-claro)">Carregando...</p>';
+    try {
+        const snap = await db.collection('solicitacoes').orderBy('data', 'desc').limit(50).get();
+        lista.innerHTML = '';
+        if (snap.empty) {
+            lista.innerHTML = '<p style="text-align:center;color:var(--texto-claro);padding:2rem">Nenhuma solicitação recebida.</p>';
+            return;
+        }
+        snap.forEach(doc => {
+            const s = doc.data();
+            const data = s.data?.toDate ? s.data.toDate().toLocaleString('pt-BR') : '---';
+            const statusCls = s.status === 'concluido' ? 'status-concluido' : s.status === 'andamento' ? 'status-andamento' : 'status-pendente';
+            const badgeCls = s.status === 'concluido' ? 'badge-concluido' : s.status === 'andamento' ? 'badge-andamento' : 'badge-pendente';
+            const statusTxt = s.status === 'concluido' ? '✅ Concluído' : s.status === 'andamento' ? '🔄 Em Andamento' : '⏳ Pendente';
+            lista.innerHTML += `
+            <div class="solicitacao-card ${statusCls}">
+                <strong style="font-size:1.1rem">${s.nome}</strong>
+                <span class="status-badge ${badgeCls}">${statusTxt}</span><br>
+                📞 ${s.telefone}${s.email !== 'Não informado' ? ` | ✉️ ${s.email}` : ''}<br>
+                📍 ${s.endereco}<br>
+                🔧 Serviço: ${s.servico}<br>
+                ${s.descricao !== 'Não informada' ? `📝 ${s.descricao}<br>` : ''}
+                💰 Pagamento: ${s.pagamento}<br>
+                <small style="color:var(--texto-claro)">${data}</small>
+                <select class="select-status" onchange="atualizarStatus('${doc.id}', this.value)">
+                    <option value="pendente" ${s.status === 'pendente' ? 'selected' : ''}>⏳ Pendente</option>
+                    <option value="andamento" ${s.status === 'andamento' ? 'selected' : ''}>🔄 Em Andamento</option>
+                    <option value="concluido" ${s.status === 'concluido' ? 'selected' : ''}>✅ Concluído</option>
+                </select>
+            </div>`;
+        });
+    } catch (erro) {
+        lista.innerHTML = `<p style="color:var(--erro)">Erro: ${erro.message}</p>`;
+    }
+}
+
+document.getElementById('formProfissional').addEventListener('submit', async e => {
+    e.preventDefault();
+    const msg = document.getElementById('msgProf');
+    try {
+        await db.collection('profissionais').add({
+            nome: document.getElementById('nomeProf').value.trim(),
+            email: document.getElementById('emailProf').value.trim().toLowerCase(),
+            data: firebase.firestore.FieldValue.serverTimestamp()
+        });
+        msg.className = 'mensagem sucesso';
+        msg.textContent = '✅ Profissional cadastrado com sucesso!';
+        e.target.reset();
+    } catch (erro) {
+        msg.className = 'mensagem erro';
+        msg.textContent = '❌ Erro: ' + erro.message;
+    }
+});
+
+function sair() { auth.signOut(); window.scrollTo({top:0,behavior:'smooth'}); }
 </script>
 </body>
 </html>
