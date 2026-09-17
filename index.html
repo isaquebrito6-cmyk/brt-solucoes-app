@@ -3,7 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <meta name="description" content="BRT Soluções • Conserto Certo — Elétrica, Hidráulica, Telhados, Vidro Temperado, Pergolado. Orçamento Grátis. Grande Curitiba. Ligue: (41) 99118-7943">
+    <meta name="description" content="BRT Soluções • Conserto Certo — Elétrica, Hidráulica, Telhados, Coberturas, Manutenção Predial. Orçamento Grátis. Grande Curitiba. Ligue: (41) 99118-7943">
+    
+    <!-- CONFIGURAÇÕES PARA INSTALAÇÃO NO CELULAR -->
     <meta name="theme-color" content="#1565C0">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -13,11 +15,14 @@
     
     <title>BRT Soluções • Conserto Certo</title>
     
-    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='16' fill='%231565C0'/%3E%3Cpath d='M50 18L32 32v20c0 6 3 11 8 14l10 6 10-6c5-3 8-8 8-14V32L50 18zm0 38c-3 0-6-1-8-3l-2-2V38l10-8 10 8v13l-2 2c-2 2-5 3-8 3z' fill='white'/%3E%3Cpath d='M72 78L50 65l-22 13v-8l22-13 22 13v8z' fill='%23E65100'/%3E%3C/svg%3E">
-    <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='16' fill='%231565C0'/%3E%3Cpath d='M50 18L32 32v20c0 6 3 11 8 14l10 6 10-6c5-3 8-8 8-14V32L50 18zm0 38c-3 0-6-1-8-3l-2-2V38l10-8 10 8v13l-2 2c-2 2-5 3-8 3z' fill='white'/%3E%3Cpath d='M72 78L50 65l-22 13v-8l22-13 22 13v8z' fill='%23E65100'/%3E%3C/svg%3E">
+    <!-- ÍCONE DO APP -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%231565C0'/%3E%3Cpath d='M50 20L30 35v22c0 7 4 13 10 17l10 6 10-6c6-4 10-10 10-17V35L50 20zm0 40c-4 0-7-2-9-4l-2-2V40l11-9 11 9v14l-2 2c-2 2-5 4-9 4z' fill='white'/%3E%3Cpath d='M75 80L50 63 25 80v-8l25-15 25 15v8z' fill='%23E65100'/%3E%3C/svg%3E">
+    <link rel="apple-touch-icon" sizes="192x192" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%231565C0'/%3E%3Cpath d='M50 20L30 35v22c0 7 4 13 10 17l10 6 10-6c6-4 10-10 10-17V35L50 20zm0 40c-4 0-7-2-9-4l-2-2V40l11-9 11 9v14l-2 2c-2 2-5 4-9 4z' fill='white'/%3E%3Cpath d='M75 80L50 63 25 80v-8l25-15 25 15v8z' fill='%23E65100'/%3E%3C/svg%3E">
     
-    <link rel="manifest" href="data:application/json;base64,eyJuYW1lIjoiQlJUIFNvbHVjw6dvaXMg4oiICBDb25zZXJ0byBDZXJ0byIsInNob3J0X25hbWUiOiJCUlQgU29sdXNow61zIiwiZGVzY3JpcHRpb24iOiJFbGV0cmljYSwgSGlkcmF1bGljYSwgVGVsaGFkb3MgZGUgdmlkcm8gZSBwZXJnb2xhZG8gLSBvcnphbWVudG8gZ3JhGlzIiwic3RhcnRfdXJsIjoiLyIsImRpc3BsYXkiOiJzdGFuZGFsb25lIiwiYmFja2dyb3VuZF9jb2xvciI6IiNGRkZGRkYiLCJ0aGVtZV9jb2xvciI6IiMxNTY1QzAiLCJpY29ucyI6W3sic3JjIjoiZGF0YTppbWFnZS9zdmcreG1sO2NoYXJzZXQ9dXRmLTglM0Nzdmcgdmlld0JveD0nMCAwIDEwMCAxMDAnJTNFJTNDcmVjdCB3aWR0aD0nMTAwJyBoZWlnaHQ9JzEwMCcgZmlsbD0nJTIzMTU2NUMwJyByeD0nMTYnLyUzRSUzQ3BhdGggZD0nTTUwIDE4TDMyIDMydjIwYzAgNiAzIDExIDggMTRsMTAgNiAxMC02YzUtMyA4LTggOC0xNFYzMkwwNSAxOG0wIDM4Yy0zIDAtNi0xLTgtM2wtMi0yVjM4bDEwLThsMTAgOHYxM2wtMiAyYy0yIDItNSAzLTggM3onIGZpbGw9J3doaXRlJyLyM0UlM0NwYXRoIGQ9J003MiA3OEw1MCA2NWwtMjIgMTN2LThsMjItMTMgMjIgMTN2OGonIGZpbGw9J3dlaWdodCUzRSUzQy9wYXRoJTNFJTNDc3R5bGU+e2ZvbnQtZmFtaWx5Ol9fc3RhbnRhcmQ7fTwvc3R5bGU+JTNDc3R5bGU+e2ZvbnQtc2l6ZToxNXB4O2ZvbnQtd2VpZ2h0OjU0MDt9PC9zdHlsZT4iLCJzaXplcyI6IjE5MngxOTIiLCJ0eXBlIjoiaW1hZ2Uvc3ZnK3htbCJ9XX0=">
+    <!-- ✅ MANIFESTO CORRIGIDO → ESSA É A CHAVE DA INSTALAÇÃO! -->
+    <link rel="manifest" href="data:application/json;charset=utf-8,%7B%22name%22%3A%22BRT%20Solu%C3%A7%C3%B5es%20%E2%80%A2%20Conserto%20Certo%22%2C%22short_name%22%3A%22BRT%20Solu%C3%A7%C3%B5es%22%2C%22description%22%3A%22El%C3%A9trica%2C%20Hidr%C3%A1ulica%2C%20Telhados%2C%20Coberturas%2C%20Manuten%C3%A7%C3%A3o%20Predial%20-%20Grande%20Curitiba%22%2C%22start_url%22%3A%22%2F%22%2C%22scope%22%3A%22%2F%22%2C%22display%22%3A%22standalone%22%2C%22background_color%22%3A%22%23F8FAFC%22%2C%22theme_color%22%3A%22%231565C0%22%2C%22orientation%22%3A%22portrait-primary%22%2C%22icons%22%3A%5B%7B%22src%22%3A%22data%3Aimage%2Fsvg%2Bxml%3Bcharset%3Dutf-8%2C%253Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%20100%20100%27%253E%253Crect%20width%3D%27100%27%20height%3D%27100%27%20rx%3D%2720%27%20fill%3D%27%25231565C0%27%2F%253E%253Cpath%20d%3D%27M50%2020L30%2035v22c0%207%204%2013%2010%2017l10%206%2010-6c6-4%2010-10%2010-17V35L50%2020zm0%2040c-4%200-7-2-9-4l-2-2V40l11-9%2011%209v14l-2%202c-2%202-5%204-9%204z%27%20fill%3D%27white%27%2F%253E%253Cpath%20d%3D%27M75%2080L50%2063%2025%2080v-8l25-15%2025%2015v8z%27%20fill%3D%27%2523E65100%27%2F%253E%253C%2Fsvg%253E%22%2C%22sizes%22%3A%22any%22%2C%22type%22%3A%22image%2Fsvg%2Bxml%22%2C%22purpose%22%3A%22any%20maskable%22%7D%2C%7B%22src%22%3A%22data%3Aimage%2Fsvg%2Bxml%3Bcharset%3Dutf-8%2C%253Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%20100%20100%27%253E%253Crect%20width%3D%27100%27%20height%3D%27100%27%20rx%3D%2720%27%20fill%3D%27%25231565C0%27%2F%253E%253Cpath%20d%3D%27M50%2020L30%2035v22c0%207%204%2013%2010%2017l10%206%2010-6c6-4%2010-10%2010-17V35L50%2020zm0%2040c-4%200-7-2-9-4l-2-2V40l11-9%2011%209v14l-2%202c-2%202-5%204-9%204z%27%20fill%3D%27white%27%2F%253E%253Cpath%20d%3D%27M75%2080L50%2063%2025%2080v-8l25-15%2025%2015v8z%27%20fill%3D%27%2523E65100%27%2F%253E%253C%2Fsvg%253E%22%2C%22sizes%22%3A%22192x192%22%7D%2C%7B%22src%22%3A%22data%3Aimage%2Fsvg%2Bxml%3Bcharset%3Dutf-8%2C%253Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%20100%20100%27%253E%253Crect%20width%3D%27100%27%20height%3D%27100%27%20rx%3D%2720%27%20fill%3D%27%25231565C0%27%2F%253E%253Cpath%20d%3D%27M50%2020L30%2035v22c0%207%204%2013%2010%2017l10%206%2010-6c6-4%2010-10%2010-17V35L50%2020zm0%2040c-4%200-7-2-9-4l-2-2V40l11-9%2011%209v14l-2%202c-2%202-5%204-9%204z%27%20fill%3D%27white%27%2F%253E%253Cpath%20d%3D%27M75%2080L50%2063%2025%2080v-8l25-15%2025%2015v8z%27%20fill%3D%27%2523E65100%27%2F%253E%253C%2Fsvg%253E%22%2C%22sizes%22%3A%22512x512%22%7D%5D%7D">
     
+    <!-- Firebase -->
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
@@ -38,7 +43,7 @@
         
         .barra-emergencia{background:linear-gradient(90deg,#C0392B,#E74C3C);color:white;text-align:center;padding:.8rem 1rem;font-weight:700;font-size:.95rem;position:sticky;top:0;z-index:10000;box-shadow:0 2px 10px rgba(192,57,43,.3);animation:pulsar-bg 2s infinite}
         @keyframes pulsar-bg{0%,100%{box-shadow:0 2px 10px rgba(192,57,43,.3)}50%{box-shadow:0 2px 20px rgba(192,57,43,.5)}}
-        .barra-emergencia a{color:var(--destaque);font-weight:700;text-decoration:underline}
+        .barra-emergencia a{color:var(--destaque);font-weight:700}
         
         .barra-topo{background:var(--primario-escuro);color:white;font-size:.85rem;padding:.6rem 1rem;text-align:center}
         .barra-topo a{color:var(--destaque);font-weight:600}
@@ -75,7 +80,7 @@
         #inicio::before{content:'';position:absolute;top:0;left:0;right:0;bottom:0;background:url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");opacity:.5}
         .hero-conteudo{max-width:700px;margin:0 auto;text-align:center;position:relative;z-index:1;animation:deslizar-baixo .8s ease-out}
         @keyframes deslizar-baixo{from{opacity:0;transform:translateY(40px)}to{opacity:1;transform:translateY(0)}}
-        .hero-conteudo h1{font-size:2.3rem;line-height:1.2;margin-bottom:1.5rem;text-shadow:0 2px 10px rgba(0,0,0,.15)}
+        .hero-conteudo h1{font-size:2.2rem;line-height:1.3;margin-bottom:1.5rem;text-shadow:0 2px 10px rgba(0,0,0,.15)}
         .hero-conteudo h1 span{color:var(--destaque);display:inline-block;animation:pulsar-texto 2s infinite}
         @keyframes pulsar-texto{0%,100%{transform:scale(1)}50%{transform:scale(1.03)}}
         .hero-conteudo p{font-size:1.1rem;margin-bottom:1rem;opacity:.95;max-width:550px;margin-left:auto;margin-right:auto}
@@ -167,7 +172,7 @@
             .nav-links{position:fixed;top:0;right:-110%;height:100vh;width:300px;background:white;flex-direction:column;padding:5rem 2rem;box-shadow:-5px 0 20px rgba(0,0,0,.15);transition:.3s;align-items:flex-start;gap:1rem}
             .nav-links.aberto{right:0}
             .btn-nav{margin-left:0;margin-top:.5rem;width:100%;text-align:center}
-            .hero-conteudo h1{font-size:1.8rem}
+            .hero-conteudo h1{font-size:1.7rem}
             .selos{grid-template-columns:repeat(2,1fr)}
             .form-container{padding:1.8rem}
             .aviso-instalar.mostrar{flex-direction:column;text-align:center}
@@ -187,7 +192,7 @@
 <div class="aviso-instalar" id="avisoInstalar">
     <span>📲 Instale o app BRT Soluções na sua tela inicial!</span>
     <div style="display:flex;align-items:center;gap:.5rem">
-        <button class="btn-instalar" id="btnInstalar">Instalar App</button>
+        <button class="btn-instalar" id="btnInstalar">✅ Instalar App</button>
         <button class="btn-fechar-aviso" id="fecharAviso" aria-label="Fechar">×</button>
     </div>
 </div>
@@ -216,7 +221,7 @@
 
 <section id="inicio">
     <div class="hero-conteudo">
-        <h1>Soluções Completas em <span>Reparos, Coberturas e Construção</span></h1>
+        <h1>Soluções Completas em <span>Reparos, Construção e Coberturas</span></h1>
         <p>Elétrica • Hidráulica • Telhados Convencionais e de Vidro • Pergolado • Manutenção Predial</p>
         <p>Atendimento na Grande Curitiba com qualidade, garantia e transparência.</p>
         
@@ -246,60 +251,55 @@
         <div class="servico-card">
             <div class="servico-icone">⚡</div>
             <h3>Serviços Elétricos</h3>
-            <p>Projetos, instalações e reparos seguindo rigorosamente a NBR 5410.</p>
             <ul class="servico-detalhes">
                 <li>Troca de chuveiros, tomadas e interruptores</li>
                 <li>Fiação, disjuntores e quadros de distribuição</li>
-                <li>Instalação de lustres, refletores e equipamentos</li>
-                <li>Adequação e atualização de sistemas elétricos</li>
-                <li>Laudos e verificação de segurança</li>
+                <li>Instalação de lustres e equipamentos</li>
+                <li>Adequação de sistemas elétricos</li>
+                <li>Segurança e conformidade NBR 5410</li>
             </ul>
         </div>
         
         <div class="servico-card">
             <div class="servico-icone">💧</div>
             <h3>Serviços Hidráulicos</h3>
-            <p>Resolução de vazamentos e instalações com precisão e durabilidade.</p>
             <ul class="servico-detalhes">
-                <li>Reparo de vazamentos em tubulações e conexões</li>
+                <li>Reparo de vazamentos em tubulações</li>
                 <li>Instalação de torneiras, registros e válvulas</li>
-                <li>Caixas d'água, bombas e sistemas de pressurização</li>
+                <li>Caixas d'água, bombas e pressurização</li>
                 <li>Desentupimento e correção de esgoto</li>
-                <li>Instalação e troca de louças e metais sanitários</li>
+                <li>Troca de louças e metais sanitários</li>
             </ul>
         </div>
         
         <div class="servico-card">
             <div class="servico-icone">🏠</div>
             <h3>Telhados e Coberturas</h3>
-            <p>Projetos, construção e manutenção com soluções tradicionais e modernas.</p>
             <ul class="servico-detalhes">
-                <li>Construção e reforma de telhados convencionais</li>
+                <li>Construção e reforma de telhados</li>
                 <li>Reparo de infiltrações, calhas e rufos</li>
-                <li>Impermeabilização de lajes e coberturas</li>
-                <li><span class="tag-destaque">🪟 Vidro Temperado</span> — segurança e iluminação natural</li>
-                <li><span class="tag-destaque">⬜ Acrílico / Policarbonato</span> — leveza e difusão de luz</li>
-                <li><span class="tag-destaque">🌿 Pergolado</span> — madeira, alumínio ou estrutura mista</li>
+                <li>Impermeabilização de lajes</li>
+                <li><span class="tag-destaque">🪟 Vidro Temperado</span> — segurança e luz natural</li>
+                <li><span class="tag-destaque">🌿 Pergolado</span> — madeira, alumínio ou misto</li>
             </ul>
         </div>
         
         <div class="servico-card">
             <div class="servico-icone">🔧</div>
             <h3>Manutenção Predial e Geral</h3>
-            <p>Conservação contínua e pequenas reformas para manter seu patrimônio em dia.</p>
             <ul class="servico-detalhes">
                 <li>Manutenção preventiva e corretiva</li>
-                <li>Pequenas reformas e adaptações de ambientes</li>
-                <li>Revestimentos, pinturas e reparos estruturais</li>
+                <li>Pequenas reformas e adaptações</li>
+                <li>Pinturas e reparos estruturais</li>
                 <li>Inspeção periódica de instalações</li>
-                <li>Atendimento contratual para comércios e condomínios</li>
+                <li>Atendimento para comércios e condomínios</li>
             </ul>
         </div>
     </div>
     
     <div class="garantia-box">
         <h3>🛡️ Garantia de Qualidade em Todos os Serviços</h3>
-        <p>Trabalhamos com transparência, materiais certificados e cumprimento de normas técnicas. Se o serviço apresentar defeito nosso, voltamos sem custo adicional.</p>
+        <p>Transparência, materiais certificados e cumprimento de normas técnicas. Se o serviço apresentar defeito nosso, voltamos sem custo adicional.</p>
         <p class="garantia-destaque">Sua tranquilidade é nossa prioridade! ✅</p>
     </div>
 </section>
@@ -311,12 +311,12 @@
         <p class="subtitulo">Compromisso real com você e com o resultado final</p>
     </div>
     <div class="porque-grid">
-        <div class="porque-item"><div class="porque-num">1</div><div><h4>Orçamento Grátis e Sem Compromisso</h4><p style="color:var(--texto-claro);font-size:.95rem">Vamos até você, avaliamos e apresentamos o valor detalhado — sem surpresas.</p></div></div>
-        <div class="porque-item"><div class="porque-num">2</div><div><h4>Preço Justo e Transparente</h4><p style="color:var(--texto-claro);font-size:.95rem">Valor combinado, discriminado e sem cobranças extras depois de fechado.</p></div></div>
-        <div class="porque-item"><div class="porque-num">3</div><div><h4>Técnico Qualificado</h4><p style="color:var(--texto-claro);font-size:.95rem">Profissional experiente, treinado e cuidadoso com sua casa e pertences.</p></div></div>
-        <div class="porque-item"><div class="porque-num">4</div><div><h4>Atendimento Rápido</h4><p style="color:var(--texto-claro);font-size:.95rem">Agilidade no atendimento, especialmente em casos de emergência.</p></div></div>
-        <div class="porque-item"><div class="porque-num">5</div><div><h4>Serviço com Garantia</h4><p style="color:var(--texto-claro);font-size:.95rem">Ficou com defeito? Voltamos sem custo adicional. Sua satisfação é nossa meta.</p></div></div>
-        <div class="porque-item"><div class="porque-num">6</div><div><h4>Gestão Direta com o Proprietário</h4><p style="color:var(--texto-claro);font-size:.95rem">Você fala direto com quem decide — sem intermediários, sem burocracia.</p></div></div>
+        <div class="porque-item"><div class="porque-num">1</div><div><h4>Orçamento Grátis</h4><p>Vamos até você, avaliamos e apresentamos valor detalhado — sem surpresas.</p></div></div>
+        <div class="porque-item"><div class="porque-num">2</div><div><h4>Preço Justo</h4><p>Valor combinado e discriminado — sem cobranças extras depois de fechado.</p></div></div>
+        <div class="porque-item"><div class="porque-num">3</div><div><h4>Profissional Qualificado</h4><p>Experiente, treinado e cuidadoso com sua casa e pertences.</p></div></div>
+        <div class="porque-item"><div class="porque-num">4</div><div><h4>Atendimento Rápido</h4><p>Agilidade, especialmente em casos de emergência.</p></div></div>
+        <div class="porque-item"><div class="porque-num">5</div><div><h4>Serviço com Garantia</h4><p>Ficou com defeito? Voltamos sem custo adicional.</p></div></div>
+        <div class="porque-item"><div class="porque-num">6</div><div><h4>Gestão Direta</h4><p>Você fala direto com quem decide — sem intermediários.</p></div></div>
     </div>
 </section>
 
@@ -334,7 +334,7 @@
         <span class="regiao-tag">📍 Araucária</span>
         <span class="regiao-tag">📍 Fazenda Rio Grande</span>
     </div>
-    <p style="text-align:center;margin-top:2rem;color:var(--texto-claro)">Não encontrou sua cidade? <a href="https://wa.me/5541991187943" target="_blank" style="color:var(--primario);font-weight:600">Chama no WhatsApp</a> que verificamos a possibilidade! 💬</p>
+    <p style="text-align:center;margin-top:2rem;color:var(--texto-claro)">Não encontrou sua cidade? <a href="https://wa.me/5541991187943" target="_blank" style="color:var(--primario);font-weight:600">Chama no WhatsApp</a> que verificamos! 💬</p>
 </section>
 
 <section id="solicitar">
@@ -345,10 +345,10 @@
     </div>
     <div class="form-container">
         <form id="formCliente">
-            <div class="form-grupo"><label for="nome">Nome Completo *</label><input type="text" id="nome" placeholder="Digite seu nome completo" required></div>
-            <div class="form-grupo"><label for="telefone">WhatsApp com DDD *</label><input type="tel" id="telefone" placeholder="(41) 9XXXX-XXXX" required></div>
-            <div class="form-grupo"><label for="email">E-mail</label><input type="email" id="email" placeholder="seuemail@exemplo.com"></div>
-            <div class="form-grupo"><label for="endereco">Endereço Completo *</label><input type="text" id="endereco" placeholder="Rua, número, bairro, cidade - PR" required></div>
+            <div class="form-grupo"><label for="nome">Nome Completo *</label><input type="text" id="nome" required></div>
+            <div class="form-grupo"><label for="telefone">WhatsApp com DDD *</label><input type="tel" id="telefone" required></div>
+            <div class="form-grupo"><label for="email">E-mail</label><input type="email" id="email"></div>
+            <div class="form-grupo"><label for="endereco">Endereço Completo *</label><input type="text" id="endereco" required></div>
             <div class="form-grupo">
                 <label for="servico">Tipo de Serviço *</label>
                 <select id="servico" required>
@@ -357,21 +357,20 @@
                     <option value="hidraulico">💧 Hidráulico</option>
                     <option value="telhado">🏠 Telhado Convencional</option>
                     <option value="vidro">🪟 Cobertura de Vidro Temperado</option>
-                    <option value="acrilico">⬜ Cobertura de Acrílico / Policarbonato</option>
                     <option value="pergolado">🌿 Pergolado</option>
                     <option value="manutencao">🔧 Manutenção Predial / Geral</option>
                     <option value="outro">📝 Outro</option>
                 </select>
             </div>
-            <div class="form-grupo"><label for="descricao">Descrição do Problema / Serviço Desejado</label><textarea id="descricao" rows="4" placeholder="Ex: Vazamento na cozinha, tomada queimada, desejo cobertura de vidro na área de lazer..."></textarea></div>
+            <div class="form-grupo"><label for="descricao">Descrição do Serviço</label><textarea id="descricao" rows="4"></textarea></div>
             <div class="form-grupo">
                 <label for="pagamento">Forma de Pagamento Preferida</label>
                 <select id="pagamento">
                     <option value="">Escolha...</option>
                     <option value="dinheiro">Dinheiro</option>
                     <option value="pix">PIX</option>
-                    <option value="cartao">Cartão de Crédito/Débito</option>
-                    <option value="combinar">A combinar após orçamento</option>
+                    <option value="cartao">Cartão</option>
+                    <option value="combinar">A combinar</option>
                 </select>
             </div>
             <button type="submit" id="btnEnviar">📤 Enviar Solicitação</button>
@@ -385,51 +384,4 @@
         <h2>Sobre Nós</h2>
         <div class="linha"></div>
     </div>
-    <div style="max-width:800px;margin:0 auto;background:white;padding:2.5rem;border-radius:20px;box-shadow:var(--sombra)">
-        <h3 style="color:var(--primario);margin-bottom:1.2rem">BRT Soluções • Conserto Certo</h3>
-        <p style="margin-bottom:1rem">Somos uma empresa focada em serviços de reparo, manutenção e construção com qualidade, transparência e agilidade. Atuamos na Grande Curitiba e região, levando soluções seguras e duradouras.</p>
-        <p style="margin-bottom:1rem">Cada serviço é realizado com dedicação, materiais certificados e normas técnicas. Da troca de uma tomada à cobertura de vidro, tratamos tudo com o mesmo cuidado.</p>
-        <p style="margin-bottom:1rem"><strong>⏰ Atendimento:</strong><br>Segunda a Sexta: 8h às 18h<br>Sábado: 8h às 13h<br><em>Emergência: ligue e consulte!</em></p>
-        <p><strong>📞 Contato:</strong> <a href="tel:+5541991187943" style="color:var(--primario);font-weight:700">(41) 99118-7943</a><br>
-        <strong>✉️ E-mail:</strong> <a href="mailto:ipbisaque@gmail.com" style="color:var(--primario);font-weight:700">ipbisaque@gmail.com</a></p>
-    </div>
-</section>
-
-<section id="entrar">
-    <div class="secao-titulo">
-        <h2>Acesso Restrito</h2>
-        <div class="linha"></div>
-        <p class="subtitulo">Apenas Administrador autorizado tem acesso ao painel</p>
-    </div>
-    <div class="form-container">
-        <form id="formLogin">
-            <div class="form-grupo"><label for="emailLogin">E-mail</label><input type="email" id="emailLogin" placeholder="seuemail@exemplo.com" required></div>
-            <div class="form-grupo"><label for="senhaLogin">Senha</label><input type="password" id="senhaLogin" placeholder="Sua senha" required></div>
-            <button type="submit" id="btnLogin">🔐 Entrar</button>
-            <div id="msgLogin" class="mensagem"></div>
-        </form>
-    </div>
-</section>
-
-<section id="admin" class="painel">
-    <div class="cabecalho-admin">
-        <h2 style="color:var(--primario)">🔐 Painel Administrativo</h2>
-        <button class="btn-sair" onclick="sair()">🚪 Sair</button>
-    </div>
-    
-    <div class="aviso-permissao">
-        ⚠️ Acesso exclusivo do Administrador. Profissionais não têm permissão de acesso a este painel.
-    </div>
-    
-    <h3 style="margin:2rem 0 1rem">📋 Solicitações Recebidas</h3>
-    <div id="listaSolicitacoes"><p style="text-align:center;color:var(--texto-claro);padding:2rem">Carregando...</p></div>
-    
-    <h3 style="margin:3rem 0 1rem">👥 Cadastrar Novo Profissional</h3>
-    <div class="form-container" style="max-width:500px">
-        <form id="formProfissional">
-            <div class="form-grupo"><label for="nomeProf">Nome Completo</label><input type="text" id="nomeProf" placeholder="Nome do profissional" required></div>
-            <div class="form-grupo"><label for="emailProf">E-mail de Acesso</label><input type="email" id="emailProf" placeholder="email@exemplo.com" required></div>
-            <button type="submit">✅ Cadastrar Profissional</button>
-            <div id="msgProf" class="mensagem"></div>
-        </form>
-        <p style="margin-top:1rem;font-size:.9rem;color:var(--texto-cl
+    <div style="max-width:800px;margin:0 auto;background:white;padding:2.5rem;border-radius:20px;box-shadow:var
