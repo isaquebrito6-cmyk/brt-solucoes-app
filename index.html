@@ -295,7 +295,7 @@
     <span>Instale o app na sua tela inicial para acesso rápido</span>
     <div style="display:flex;gap:6px;align-items:center;">
       <button id="installBtn">Instalar</button>
-      <button class="x" id="dismissInstall">&times;</button>
+      <button class="x" id="dismissInstall" aria-label="Fechar aviso">&times;</button>
     </div>
   </div>
 
@@ -391,7 +391,7 @@
           <input type="file" id="f-foto" accept="image/*" capture="environment" onchange="handlePhotoSelect(event)">
           <div id="fotoPreviewBox" style="display:none;margin-top:10px;position:relative;width:100px;">
             <img id="fotoPreview" style="width:100px;height:100px;object-fit:cover;border-radius:10px;border:1.5px solid var(--line);" />
-            <button type="button" onclick="clearPhoto()" style="position:absolute;top:-8px;right:-8px;width:24px;height:24px;border-radius:50%;background:var(--red);color:#fff;border:2px solid #fff;font-weight:700;font-size:13px;line-height:1;">&times;</button>
+            <button type="button" onclick="clearPhoto()" aria-label="Remover foto" style="position:absolute;top:-8px;right:-8px;width:24px;height:24px;border-radius:50%;background:var(--red);color:#fff;border:2px solid #fff;font-weight:700;font-size:13px;line-height:1;">&times;</button>
           </div>
         </div>
         <div class="field">
@@ -501,16 +501,22 @@
       <div class="back-link" onclick="goTo('perfil')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M15 18l-6-6 6-6"/></svg>Voltar</div>
       <h2 class="section-title">Acesso do profissional</h2>
       <p class="section-lead">Selecione seu nome e informe o PIN cadastrado pelo administrador.</p>
-      <div class="field">
-        <label>Profissional</label>
-        <select id="pro-nome"></select>
+      <div id="proLoginEmpty" style="display:none;" class="empty-state">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg>
+        <p>Nenhum profissional cadastrado ainda. Peça ao administrador pra te adicionar no painel.</p>
       </div>
-      <div class="field">
-        <label>PIN de acesso</label>
-        <input type="password" id="pro-pin" inputmode="numeric" placeholder="••••">
+      <div id="proLoginForm">
+        <div class="field">
+          <label>Profissional</label>
+          <select id="pro-nome"></select>
+        </div>
+        <div class="field">
+          <label>PIN de acesso</label>
+          <input type="password" id="pro-pin" inputmode="numeric" placeholder="••••">
+        </div>
+        <button class="btn btn-dark btn-block" onclick="loginProfissional()">Entrar</button>
+        <p id="proLoginErr" class="note" style="display:none;margin-top:14px;">PIN incorreto. Confira com o administrador.</p>
       </div>
-      <button class="btn btn-dark btn-block" onclick="loginProfissional()">Entrar</button>
-      <p id="proLoginErr" class="note" style="display:none;margin-top:14px;">PIN incorreto. Confira com o administrador.</p>
     </section>
   </div>
 
@@ -577,7 +583,7 @@
 
 </div>
 
-<div class="toast" id="toast"></div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
 
 <div class="tabbar">
   <button class="tab active" data-tab="home" onclick="goTo('home')">
@@ -793,6 +799,13 @@ async function submitCadastro(){
     return;
   }
 
+  const telDigits = tel.replace(/\D/g, "");
+  if(telDigits.length < 10 || telDigits.length > 11){
+    document.getElementById("f-tel").style.borderColor = "var(--red)";
+    toast("Confira o telefone — precisa ter DDD + número completo.");
+    return;
+  }
+
   const submitBtn = document.getElementById("submitBtn");
   const originalLabel = submitBtn.innerHTML;
   submitBtn.disabled = true;
@@ -846,6 +859,9 @@ function resetCadastro(){
 /* ===================== LOGIN: PROFISSIONAL ===================== */
 function renderProSelect(){
   const sel = document.getElementById("pro-nome");
+  const hasAny = STATE.professionals.length > 0;
+  document.getElementById("proLoginEmpty").style.display = hasAny ? "none" : "block";
+  document.getElementById("proLoginForm").style.display = hasAny ? "block" : "none";
   sel.innerHTML = STATE.professionals.map((p,i)=>`<option value="${i}">${p.nome}</option>`).join("");
   document.getElementById("proLoginErr").style.display = "none";
   document.getElementById("pro-pin").value = "";
@@ -895,7 +911,7 @@ function renderAdminPanel(){
         <div class="t">${p.nome}</div>
         <div class="s">${p.esp || "—"} ${p.tel ? "· " + p.tel : ""} · PIN <span id="pin-${i}" style="cursor:pointer;text-decoration:underline dotted;" onclick="togglePinVisibility(${i})">••••</span></div>
       </div>
-      <button class="icon-btn" onclick="removeProfissional(${i})">
+      <button class="icon-btn" aria-label="Remover profissional" onclick="removeProfissional(${i})">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6"/></svg>
       </button>
     </div>`).join("") || `<p style="font-size:12.5px;color:var(--muted);">Nenhum profissional cadastrado ainda.</p>`;
@@ -957,6 +973,10 @@ async function addProfissional(){
 }
 
 async function removeProfissional(i){
+  const p = STATE.professionals[i];
+  if(!p) return;
+  const sure = confirm(`Remover "${p.nome}"? Ele(a) não vai mais conseguir entrar no app com o PIN atual.`);
+  if(!sure) return;
   try{
     const r = await fetch(`${API}/professionals/${i}`, {
       method:"DELETE", headers:{ "Content-Type":"application/json" },
@@ -970,6 +990,7 @@ async function removeProfissional(i){
   }
   cacheState();
   renderAdminPanel();
+  toast(`${p.nome} removido.`);
 }
 
 async function saveConfig(){
