@@ -22,12 +22,12 @@ function isAdmin(body) {
   return typeof body?.adminEmail === "string" && body.adminEmail.trim().toLowerCase() === ADMIN_EMAIL;
 }
 
-async function checkRateLimit(env, request) {
+async function checkRateLimit(env, request, bucket = "ratelimit", limit = 5, windowSec = 600) {
   const ip = request.headers.get("CF-Connecting-IP") || "unknown";
-  const key = `ratelimit:${ip}`;
+  const key = `${bucket}:${ip}`;
   const count = parseInt((await env.BRT_DATA.get(key)) || "0", 10);
-  if (count >= 5) return false;
-  await env.BRT_DATA.put(key, String(count + 1), { expirationTtl: 600 });
+  if (count >= limit) return false;
+  await env.BRT_DATA.put(key, String(count + 1), { expirationTtl: windowSec });
   return true;
 }
 
@@ -38,7 +38,31 @@ async function handleApi(request, env) {
 
   try {
     if (method === "GET" && path.length === 0) {
-      return Response.json(await getAll(env));
+      const data = await getAll(env);
+      const safeProfessionals = data.professionals.map(({ pin, ...rest }) => rest);
+      return Response.json({ ...data, professionals: safeProfessionals });
+    }
+
+    if (method === "POST" && path[0] === "pro-login") {
+      const allowed = await checkRateLimit(env, request, "ratelimit-pin", 10, 600);
+      if (!allowed) {
+        return new Response("Too many attempts, try again later", { status: 429 });
+      }
+      const body = await request.json();
+      const data = await getAll(env);
+      const idx = parseInt(body.idx, 10);
+      const p = data.professionals[idx];
+      if (p && typeof body.pin === "string" && p.pin === body.pin) {
+        return Response.json({ ok: true, nome: p.nome });
+      }
+      return Response.json({ ok: false }, { status: 401 });
+    }
+
+    if (method === "POST" && path[0] === "admin" && path[1] === "professionals") {
+      const body = await request.json();
+      if (!isAdmin(body)) return new Response("Forbidden", { status: 403 });
+      const data = await getAll(env);
+      return Response.json({ professionals: data.professionals });
     }
 
     if (method === "POST" && path[0] === "requests") {
@@ -47,7 +71,7 @@ async function handleApi(request, env) {
       if (body.website) {
         return Response.json({ ok: true, item: { id: "0", status: "Novo" } });
       }
-      const allowed = await checkRateLimit(env, request);
+      const allowed = await checkRateLimit(env, request, "ratelimit-req", 5, 600);
       if (!allowed) {
         return new Response("Too many requests, try again later", { status: 429 });
       }

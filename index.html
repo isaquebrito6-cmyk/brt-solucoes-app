@@ -867,16 +867,32 @@ function renderProSelect(){
   document.getElementById("pro-pin").value = "";
 }
 
-function loginProfissional(){
+async function loginProfissional(){
   const idx = document.getElementById("pro-nome").value;
   const pin = document.getElementById("pro-pin").value.trim();
-  const p = STATE.professionals[idx];
-  if(p && p.pin === pin){
-    currentRole = { type:"pro", nome:p.nome };
-    goTo("pro-panel");
-  } else {
-    document.getElementById("proLoginErr").style.display = "block";
+  const errEl = document.getElementById("proLoginErr");
+  errEl.style.display = "none";
+  try{
+    const r = await fetch(`${API}/pro-login`, {
+      method:"POST", headers:{ "Content-Type":"application/json" },
+      body: JSON.stringify({ idx, pin })
+    });
+    const data = await r.json();
+    if(r.ok && data.ok){
+      currentRole = { type:"pro", nome:data.nome };
+      goTo("pro-panel");
+      return;
+    }
+  }catch(e){
+    // Offline fallback: only works if this device already cached the (unsafe) local copy.
+    const p = STATE.professionals[idx];
+    if(p && p.pin && p.pin === pin){
+      currentRole = { type:"pro", nome:p.nome };
+      goTo("pro-panel");
+      return;
+    }
   }
+  errEl.style.display = "block";
 }
 
 function renderProPanel(){
@@ -941,11 +957,24 @@ async function shareApp(){
   }catch(e){ /* user cancelled share, ignore */ }
 }
 
-function togglePinVisibility(i){
+async function togglePinVisibility(i){
   const el = document.getElementById(`pin-${i}`);
-  const p = STATE.professionals[i];
-  if(!el || !p) return;
-  el.textContent = el.textContent === "••••" ? p.pin : "••••";
+  if(!el) return;
+  if(el.textContent !== "••••"){
+    el.textContent = "••••";
+    return;
+  }
+  el.textContent = "...";
+  try{
+    const r = await fetch(`${API}/admin/professionals`, {
+      method:"POST", headers:{ "Content-Type":"application/json" },
+      body: JSON.stringify({ adminEmail: ADMIN_EMAIL })
+    });
+    const data = await r.json();
+    el.textContent = (r.ok && data.professionals[i]) ? data.professionals[i].pin : "erro";
+  }catch(e){
+    el.textContent = "offline";
+  }
 }
 
 async function addProfissional(){
