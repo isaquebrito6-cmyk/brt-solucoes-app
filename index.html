@@ -542,7 +542,7 @@
       </div>
       <button class="btn btn-dark btn-block" onclick="loginAdmin()">Entrar</button>
       <p id="adminLoginErr" class="note" style="display:none;margin-top:14px;">E-mail não reconhecido como administrador.</p>
-      <p class="note blue" style="margin-top:16px;">Este é um acesso simples para começar. Para segurança real (senha, múltiplos administradores, sincronização entre aparelhos), recomendamos evoluir para um login com backend — posso te ajudar com isso depois.</p>
+      <p class="note blue" style="margin-top:16px;">O e-mail é conferido no servidor, e o acesso fica válido por 12 horas. Ainda não tem senha nem múltiplos administradores — se quiser evoluir pra isso, é só pedir.</p>
     </section>
   </div>
 
@@ -606,7 +606,6 @@
 
 <script>
 /* ===================== DATA ===================== */
-const ADMIN_EMAIL = "ipbisaque@gmail.com";
 const CITIES_DEFAULT = ["Curitiba","São José dos Pinhais","Colombo","Pinhais","Araucária","Campo Largo","Fazenda Rio Grande","Almirante Tamandaré","Piraquara"];
 const API = "/api";
 
@@ -615,10 +614,14 @@ const SERVICES = [
   { id:"hidraulica", nome:"Instalações e reparos hidráulicos", desc:"Vazamentos, entupimentos, registros e tubulações.", icon:iconDrop() },
   { id:"telhado-reparo", nome:"Reparo de telhado", desc:"Goteiras, telhas quebradas e calhas entupidas.", icon:iconRoof() },
   { id:"telhado-novo", nome:"Construção de telhado novo", desc:"Estrutura e cobertura nova, sob medida.", icon:iconRoof() },
+  { id:"cobertura-vidro-acrilico", nome:"Cobertura em vidro temperado ou acrílico", desc:"Execução de coberturas e claraboias com vidro temperado laminado ou chapas de acrílico, incluindo estrutura de fixação e calhas.", icon:iconGlassRoof() },
+  { id:"pergolado", nome:"Construção de pergolado", desc:"Estruturas de pergolado em madeira, aço ou alumínio para áreas externas, varandas e garagens, com ou sem fechamento.", icon:iconPergola() },
   { id:"chuveiro-tomada", nome:"Troca de chuveiros e tomadas", desc:"Substituição rápida e segura de chuveiros, tomadas e interruptores.", icon:iconPlug() },
   { id:"manutencao-predial", nome:"Manutenção predial geral", desc:"Pequenos reparos e manutenção preventiva do imóvel.", icon:iconTool() },
 ];
 
+function iconGlassRoof(){return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12L12 4l9 8"/><path d="M6 11v9h12v-9"/><path d="M12 4v16M6 15h12"/></svg>';}
+function iconPergola(){return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7h18"/><path d="M5 7v13M19 7v13"/><path d="M8 7v4M11.3 7v4M14.7 7v4M18 7v4"/></svg>';}
 function iconBolt(){return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>';}
 function iconDrop(){return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2s6 7 6 12a6 6 0 01-12 0c0-5 6-12 6-12z"/></svg>';}
 function iconRoof(){return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12L12 4l9 8"/><path d="M5 11v9h14v-9"/></svg>';}
@@ -901,18 +904,31 @@ function renderProPanel(){
 }
 
 /* ===================== LOGIN: ADMIN ===================== */
-function loginAdmin(){
+let adminToken = null;
+
+async function loginAdmin(){
   const email = document.getElementById("admin-email").value.trim().toLowerCase();
-  if(email === ADMIN_EMAIL){
-    currentRole = { type:"admin", nome:"Administrador" };
-    goTo("admin-panel");
-  } else {
-    document.getElementById("adminLoginErr").style.display = "block";
-  }
+  const errEl = document.getElementById("adminLoginErr");
+  errEl.style.display = "none";
+  try{
+    const r = await fetch(`${API}/admin-login`, {
+      method:"POST", headers:{ "Content-Type":"application/json" },
+      body: JSON.stringify({ email })
+    });
+    const data = await r.json();
+    if(r.ok && data.ok){
+      adminToken = data.token;
+      currentRole = { type:"admin", nome:"Administrador" };
+      goTo("admin-panel");
+      return;
+    }
+  }catch(e){ /* fall through to error */ }
+  errEl.style.display = "block";
 }
 
 function logoutRole(){
   currentRole = null;
+  adminToken = null;
   goTo("perfil");
 }
 
@@ -968,7 +984,7 @@ async function togglePinVisibility(i){
   try{
     const r = await fetch(`${API}/admin/professionals`, {
       method:"POST", headers:{ "Content-Type":"application/json" },
-      body: JSON.stringify({ adminEmail: ADMIN_EMAIL })
+      body: JSON.stringify({ adminToken })
     });
     const data = await r.json();
     el.textContent = (r.ok && data.professionals[i]) ? data.professionals[i].pin : "erro";
@@ -986,7 +1002,7 @@ async function addProfissional(){
   try{
     const r = await fetch(`${API}/professionals`, {
       method:"POST", headers:{ "Content-Type":"application/json" },
-      body: JSON.stringify({ nome, tel, esp, pin, adminEmail: ADMIN_EMAIL })
+      body: JSON.stringify({ nome, tel, esp, pin, adminToken })
     });
     if(!r.ok) throw new Error("fail");
     const data = await r.json();
@@ -1009,7 +1025,7 @@ async function removeProfissional(i){
   try{
     const r = await fetch(`${API}/professionals/${i}`, {
       method:"DELETE", headers:{ "Content-Type":"application/json" },
-      body: JSON.stringify({ adminEmail: ADMIN_EMAIL })
+      body: JSON.stringify({ adminToken })
     });
     if(!r.ok) throw new Error("fail");
     const data = await r.json();
@@ -1030,7 +1046,7 @@ async function saveConfig(){
   try{
     const r = await fetch(`${API}/config`, {
       method:"POST", headers:{ "Content-Type":"application/json" },
-      body: JSON.stringify({ whatsapp, horario, pix, cidades, adminEmail: ADMIN_EMAIL })
+      body: JSON.stringify({ whatsapp, horario, pix, cidades, adminToken })
     });
     if(!r.ok) throw new Error("fail");
     const data = await r.json();

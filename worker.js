@@ -22,6 +22,19 @@ function isAdmin(body) {
   return typeof body?.adminEmail === "string" && body.adminEmail.trim().toLowerCase() === ADMIN_EMAIL;
 }
 
+async function isAdminToken(env, body) {
+  const token = typeof body?.adminToken === "string" ? body.adminToken : "";
+  if (!token) return false;
+  const session = await env.BRT_DATA.get(`session:${token}`);
+  return session === "admin";
+}
+
+async function requireAdmin(env, body) {
+  // Accept either a session token (preferred) or the legacy raw-email check (kept for backward compatibility during rollout).
+  if (await isAdminToken(env, body)) return true;
+  return isAdmin(body);
+}
+
 async function checkRateLimit(env, request, bucket = "ratelimit", limit = 5, windowSec = 600) {
   const ip = request.headers.get("CF-Connecting-IP") || "unknown";
   const key = `${bucket}:${ip}`;
@@ -58,9 +71,24 @@ async function handleApi(request, env) {
       return Response.json({ ok: false }, { status: 401 });
     }
 
+    if (method === "POST" && path[0] === "admin-login") {
+      const allowed = await checkRateLimit(env, request, "ratelimit-adminlogin", 10, 600);
+      if (!allowed) {
+        return new Response("Too many attempts, try again later", { status: 429 });
+      }
+      const body = await request.json();
+      const email = typeof body.email === "string" ? body.email.trim().toLowerCase() : "";
+      if (email !== ADMIN_EMAIL) {
+        return Response.json({ ok: false }, { status: 401 });
+      }
+      const token = crypto.randomUUID();
+      await env.BRT_DATA.put(`session:${token}`, "admin", { expirationTtl: 43200 }); // 12h
+      return Response.json({ ok: true, token });
+    }
+
     if (method === "POST" && path[0] === "admin" && path[1] === "professionals") {
       const body = await request.json();
-      if (!isAdmin(body)) return new Response("Forbidden", { status: 403 });
+      if (!(await requireAdmin(env, body))) return new Response("Forbidden", { status: 403 });
       const data = await getAll(env);
       return Response.json({ professionals: data.professionals });
     }
@@ -109,7 +137,7 @@ async function handleApi(request, env) {
 
     if (method === "POST" && path[0] === "professionals") {
       const body = await request.json();
-      if (!isAdmin(body)) return new Response("Forbidden", { status: 403 });
+      if (!(await requireAdmin(env, body))) return new Response("Forbidden", { status: 403 });
       const data = await getAll(env);
       data.professionals.push({
         nome: String(body.nome || "").slice(0, 150),
@@ -123,7 +151,7 @@ async function handleApi(request, env) {
 
     if (method === "DELETE" && path[0] === "professionals" && path[1] !== undefined) {
       const body = await request.json().catch(() => ({}));
-      if (!isAdmin(body)) return new Response("Forbidden", { status: 403 });
+      if (!(await requireAdmin(env, body))) return new Response("Forbidden", { status: 403 });
       const idx = parseInt(path[1], 10);
       const data = await getAll(env);
       if (Number.isInteger(idx) && idx >= 0 && idx < data.professionals.length) {
@@ -135,7 +163,7 @@ async function handleApi(request, env) {
 
     if (method === "POST" && path[0] === "config") {
       const body = await request.json();
-      if (!isAdmin(body)) return new Response("Forbidden", { status: 403 });
+      if (!(await requireAdmin(env, body))) return new Response("Forbidden", { status: 403 });
       const config = {
         whatsapp: String(body.whatsapp || "").replace(/\D/g, "").slice(0, 20),
         horario: String(body.horario || "").slice(0, 100),
