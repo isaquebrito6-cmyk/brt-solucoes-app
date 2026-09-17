@@ -22,6 +22,15 @@ function isAdmin(body) {
   return typeof body?.adminEmail === "string" && body.adminEmail.trim().toLowerCase() === ADMIN_EMAIL;
 }
 
+async function checkRateLimit(env, request) {
+  const ip = request.headers.get("CF-Connecting-IP") || "unknown";
+  const key = `ratelimit:${ip}`;
+  const count = parseInt((await env.BRT_DATA.get(key)) || "0", 10);
+  if (count >= 5) return false;
+  await env.BRT_DATA.put(key, String(count + 1), { expirationTtl: 600 });
+  return true;
+}
+
 async function handleApi(request, env) {
   const url = new URL(request.url);
   const path = url.pathname.replace(/^\/api\/?/, "").split("/").filter(Boolean);
@@ -37,6 +46,10 @@ async function handleApi(request, env) {
       // Honeypot: bots fill hidden fields humans never see. Pretend success, save nothing.
       if (body.website) {
         return Response.json({ ok: true, item: { id: "0", status: "Novo" } });
+      }
+      const allowed = await checkRateLimit(env, request);
+      if (!allowed) {
+        return new Response("Too many requests, try again later", { status: 429 });
       }
       const data = await getAll(env);
       const foto = typeof body.foto === "string" && body.foto.startsWith("data:image/") ? body.foto.slice(0, 900000) : "";
@@ -132,6 +145,10 @@ export default {
         { status: 404, headers: { "content-type": "text/html; charset=utf-8" } }
       );
     }
-    return res;
+    const secured = new Response(res.body, res);
+    secured.headers.set("X-Content-Type-Options", "nosniff");
+    secured.headers.set("X-Frame-Options", "SAMEORIGIN");
+    secured.headers.set("Referrer-Policy", "strict-origin-when-cross-origin");
+    return secured;
   },
 };

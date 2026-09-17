@@ -453,6 +453,10 @@
       <div class="card">
         <h3 style="margin-bottom:6px;">Sobre a BRT Soluções</h3>
         <p style="font-size:12.8px;color:var(--muted);line-height:1.5;">Atendimento residencial e predial em toda a Grande Curitiba, com orçamento sem compromisso e contato direto pelo WhatsApp.</p>
+        <button class="btn btn-ghost btn-block" style="margin-top:12px;" onclick="shareApp()">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" style="margin-right:6px;"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.6 10.6l6.8-3.8M8.6 13.4l6.8 3.8"/></svg>
+          Compartilhar o app
+        </button>
         <div class="divider"></div>
         <div style="display:flex;gap:16px;flex-wrap:wrap;">
           <span class="back-link" style="margin:0;" onclick="goTo('termos')">Termos de uso</span>
@@ -889,7 +893,7 @@ function renderAdminPanel(){
     <div class="list-manage-item">
       <div>
         <div class="t">${p.nome}</div>
-        <div class="s">${p.esp || "—"} ${p.tel ? "· " + p.tel : ""} · PIN ${p.pin}</div>
+        <div class="s">${p.esp || "—"} ${p.tel ? "· " + p.tel : ""} · PIN <span id="pin-${i}" style="cursor:pointer;text-decoration:underline dotted;" onclick="togglePinVisibility(${i})">••••</span></div>
       </div>
       <button class="icon-btn" onclick="removeProfissional(${i})">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6"/></svg>
@@ -903,6 +907,29 @@ function renderAdminPanel(){
 
   const syncNote = document.getElementById("syncNote");
   if(syncNote) syncNote.textContent = ONLINE ? "Sincronizado — visível em todos os aparelhos." : "Offline — mudanças salvas só neste aparelho até reconectar.";
+}
+
+async function shareApp(){
+  const shareData = {
+    title: "BRT Soluções — Conserto Certo",
+    text: "Elétrica, hidráulica, telhados e manutenção predial na Grande Curitiba. Peça seu orçamento:",
+    url: window.location.origin
+  };
+  try{
+    if(navigator.share){
+      await navigator.share(shareData);
+    } else {
+      await navigator.clipboard.writeText(shareData.url);
+      toast("Link copiado! Cole numa conversa pra compartilhar.");
+    }
+  }catch(e){ /* user cancelled share, ignore */ }
+}
+
+function togglePinVisibility(i){
+  const el = document.getElementById(`pin-${i}`);
+  const p = STATE.professionals[i];
+  if(!el || !p) return;
+  el.textContent = el.textContent === "••••" ? p.pin : "••••";
 }
 
 async function addProfissional(){
@@ -1048,6 +1075,11 @@ function refreshCurrentList(){
 }
 
 loadState();
+
+const urlParams = new URLSearchParams(window.location.search);
+if(urlParams.get("atalho") === "cadastro"){
+  setTimeout(() => goTo("cadastro"), 50);
+}
 
 /* ===================== INSTALL PROMPT (Android/Chrome) ===================== */
 let deferredPrompt;
