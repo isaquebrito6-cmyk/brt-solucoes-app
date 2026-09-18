@@ -288,28 +288,20 @@
   .install-banner .x{background:none;color:#fff;opacity:.85;font-size:18px;padding:0 4px;}
 
   /* ===================== RESPONSIVE — TABLET & DESKTOP ===================== */
-  /* #app, .tabbar and .toast share the same viewport-centered max-width so the
-     fixed bottom tabbar always lines up under the app column. #app keeps
-     min-height:100vh so it always reaches the bottom of the screen — the
-     backdrop below is only ever visible on the sides, never underneath. */
+  /* #app and .tabbar fill the full browser width from here up — no more
+     centered "card" with visible backdrop on the sides. Text-heavy content
+     (forms, long copy) still gets a constrained, centered max-width further
+     down so lines don't stretch edge-to-edge and stay easy to read. */
   @media (min-width:600px){
-    body{
-      background:
-        radial-gradient(900px 560px at 85% 0%, rgba(240,115,11,0.14), transparent 60%),
-        var(--navy);
-    }
-    #app{max-width:640px;box-shadow:0 0 60px rgba(9,17,29,0.35);}
-    .tabbar{max-width:640px;}
-    .toast{max-width:600px;}
+    #app{max-width:none;}
+    .tabbar{max-width:none;}
+    .toast{max-width:420px;}
     .hero h1{font-size:38px;}
     .hero p{max-width:380px;}
     .svc-grid{grid-template-columns:repeat(3,1fr);}
   }
 
   @media (min-width:960px){
-    #app{max-width:960px;}
-    .tabbar{max-width:960px;}
-    .toast{max-width:640px;}
     .hero{padding:44px 56px 48px;}
     .hero h1{font-size:50px;}
     .hero p{max-width:480px;font-size:16px;}
@@ -320,7 +312,7 @@
     .svc-tile{padding:18px 16px;}
     .topbar{padding:20px 56px 18px;}
     /* text-heavy / form screens read better at a constrained width even
-       though the app shell itself now fills most of the browser window */
+       though the app shell itself now fills the whole browser window */
     #cadastroForm,#cadastroSuccess .success-box,
     #screen-perfil section.pad>*,#screen-login-pro section.pad>*,
     #screen-login-admin section.pad>*,#screen-pro-panel section.pad>*,
@@ -333,9 +325,14 @@
   }
 
   @media (min-width:1280px){
-    #app{max-width:1180px;}
-    .tabbar{max-width:1180px;}
+    .hero{padding:56px 80px 64px;}
+    section.pad{padding:40px 80px;}
+    .topbar{padding:24px 80px 20px;}
     .svc-grid{grid-template-columns:repeat(5,1fr);}
+  }
+
+  @media (min-width:1600px){
+    .svc-grid{grid-template-columns:repeat(6,1fr);}
   }
 </style>
 </head>
