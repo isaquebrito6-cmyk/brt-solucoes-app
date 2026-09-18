@@ -131,6 +131,15 @@ async function handleApi(request, env) {
       if (!item) return new Response("Not found", { status: 404 });
       if (typeof body.status === "string") item.status = body.status;
       if (typeof body.pago === "boolean") item.pago = body.pago;
+      if (typeof body.valor === "number" && body.valor >= 0) item.valor = body.valor;
+      if (typeof body.notaAdmin === "string") {
+        if (!(await requireAdmin(env, body))) return new Response("Forbidden", { status: 403 });
+        item.notaAdmin = body.notaAdmin.slice(0, 500);
+      }
+      if (typeof body.atribuidoA === "string") {
+        if (!(await requireAdmin(env, body))) return new Response("Forbidden", { status: 403 });
+        item.atribuidoA = body.atribuidoA.slice(0, 150);
+      }
       await env.BRT_DATA.put("requests", JSON.stringify(data.requests));
       return Response.json({ ok: true, item });
     }

@@ -555,6 +555,15 @@
       <p id="syncNote" class="note blue" style="margin-bottom:16px;"></p>
 
       <div class="card">
+        <h3>Resumo financeiro <span style="font-weight:500;color:var(--muted);font-size:11px;">(só você vê)</span></h3>
+        <div class="kv-row"><span class="k">Total faturado (marcado como pago)</span><span class="v" id="finTotal">R$ 0,00</span></div>
+        <div class="kv-row"><span class="k">Ticket médio</span><span class="v" id="finTicket">—</span></div>
+        <div class="kv-row"><span class="k">Serviços pagos</span><span class="v" id="finPagos">0</span></div>
+        <div class="kv-row"><span class="k">Em andamento</span><span class="v" id="finAndamento">0</span></div>
+        <div class="kv-row"><span class="k">Concluídos</span><span class="v" id="finConcluidos">0</span></div>
+      </div>
+
+      <div class="card">
         <h3>Solicitações recebidas <span id="reqCount" class="pill pill-new"></span></h3>
         <div id="adminReqList"></div>
       </div>
@@ -900,7 +909,7 @@ async function loginProfissional(){
 
 function renderProPanel(){
   document.getElementById("proWelcome").textContent = `Olá, ${currentRole ? currentRole.nome : ""}. Veja abaixo os atendimentos.`;
-  renderRequestList("proReqList", true);
+  renderRequestList("proReqList", "pro");
 }
 
 /* ===================== LOGIN: ADMIN ===================== */
@@ -934,8 +943,19 @@ function logoutRole(){
 
 /* ===================== ADMIN PANEL ===================== */
 function renderAdminPanel(){
-  renderRequestList("adminReqList", true);
+  renderRequestList("adminReqList", "admin");
   document.getElementById("reqCount").textContent = STATE.requests.length;
+
+  const pagos = STATE.requests.filter(r => r.pago);
+  const totalFaturado = pagos.reduce((sum, r) => sum + (Number(r.valor) || 0), 0);
+  const ticketMedio = pagos.length ? totalFaturado / pagos.length : 0;
+  const emAndamento = STATE.requests.filter(r => r.status === "Em andamento").length;
+  const concluidos = STATE.requests.filter(r => r.status === "Concluído").length;
+  document.getElementById("finTotal").textContent = `R$ ${totalFaturado.toFixed(2)}`;
+  document.getElementById("finTicket").textContent = pagos.length ? `R$ ${ticketMedio.toFixed(2)}` : "—";
+  document.getElementById("finPagos").textContent = pagos.length;
+  document.getElementById("finAndamento").textContent = emAndamento;
+  document.getElementById("finConcluidos").textContent = concluidos;
 
   document.getElementById("proManageList").innerHTML = STATE.professionals.map((p,i)=>`
     <div class="list-manage-item">
@@ -1061,10 +1081,14 @@ async function saveConfig(){
 }
 
 /* ===================== REQUEST LIST (shared render) ===================== */
-function renderRequestList(containerId, editable){
+function renderRequestList(containerId, variant){
   const el = document.getElementById(containerId);
   if(!el) return;
-  const reqs = STATE.requests;
+  const isAdminView = variant === "admin";
+  const reqs = isAdminView
+    ? STATE.requests
+    : STATE.requests.filter(r => !r.atribuidoA || r.atribuidoA === (currentRole && currentRole.nome));
+
   if(reqs.length === 0){
     el.innerHTML = `<div class="empty-state">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M9 7h6M9 11h6M9 15h4"/></svg>
@@ -1083,14 +1107,27 @@ function renderRequestList(containerId, editable){
       </div>
       ${r.desc ? `<div class="desc">${r.desc}</div>` : ""}
       ${r.foto ? `<img src="${r.foto}" onclick="window.open('${r.foto.replace(/'/g, "\\'")}','_blank')" style="width:72px;height:72px;object-fit:cover;border-radius:8px;margin-top:8px;border:1px solid var(--line);cursor:pointer;" alt="Foto do problema">` : ""}
-      <div class="meta" style="margin-top:6px;">📞 ${r.tel || "—"} · ${new Date(r.criadoEm).toLocaleDateString('pt-BR')}</div>
-      ${editable ? `
+      <div class="meta" style="margin-top:6px;">📞 ${r.tel || "—"} · ${new Date(r.criadoEm).toLocaleDateString('pt-BR')}${r.valor ? ` · R$ ${Number(r.valor).toFixed(2)}` : ""}</div>
+      ${isAdminView && r.atribuidoA ? `<div class="meta" style="margin-top:3px;">👤 Atribuído: ${r.atribuidoA}</div>` : ""}
       <div class="req-actions">
         <select class="status-select" onchange="updateStatus('${r.id}', this.value)">
           ${["Novo","Em andamento","Concluído"].map(st=>`<option value="${st}" ${r.status===st?"selected":""}>${st}</option>`).join("")}
         </select>
         <button class="btn btn-sm ${r.pago ? 'btn-ghost' : 'btn-dark'}" onclick="togglePago('${r.id}')">${r.pago ? "✓ Pago" : "Marcar como pago"}</button>
         ${r.tel ? `<button class="btn btn-sm btn-wa" onclick="contactClient('${r.id}')">WhatsApp</button>` : ""}
+      </div>
+      ${isAdminView ? `
+      <div class="divider" style="margin:10px 0;"></div>
+      <div class="field" style="margin-bottom:8px;">
+        <label style="font-size:11px;">Atribuir a</label>
+        <select class="status-select" style="width:100%;" onchange="assignProfissional('${r.id}', this.value)">
+          <option value="">Não atribuído (todos veem)</option>
+          ${STATE.professionals.map(p=>`<option value="${p.nome}" ${r.atribuidoA===p.nome?"selected":""}>${p.nome}</option>`).join("")}
+        </select>
+      </div>
+      <div class="field" style="margin-bottom:0;">
+        <label style="font-size:11px;">Nota interna (só você vê)</label>
+        <textarea rows="2" style="font-size:12.5px;min-height:44px;" placeholder="Ex: cliente prefere fim de tarde, cobrar à vista..." onblur="saveNota('${r.id}', this.value)">${r.notaAdmin || ""}</textarea>
       </div>` : ""}
     </div>`).join("");
 }
@@ -1117,13 +1154,49 @@ async function updateStatus(id, status){
 async function togglePago(id){
   const r = STATE.requests.find(x=>x.id===id);
   if(!r) return;
+  const wasPago = r.pago;
   r.pago = !r.pago;
+  let valor;
+  if(!wasPago && r.pago){
+    const input = prompt("Valor cobrado (R$) — deixe em branco pra pular:", r.valor || "");
+    if(input !== null && input.trim() !== ""){
+      const parsed = parseFloat(input.replace(",", "."));
+      if(!isNaN(parsed) && parsed >= 0){ valor = parsed; r.valor = parsed; }
+    }
+  }
   cacheState();
   refreshCurrentList();
   try{
+    const payload = { pago: r.pago };
+    if(typeof valor === "number") payload.valor = valor;
     await fetch(`${API}/requests/${id}`, {
       method:"PATCH", headers:{ "Content-Type":"application/json" },
-      body: JSON.stringify({ pago: r.pago })
+      body: JSON.stringify(payload)
+    });
+  }catch(e){ /* stays local until next sync */ }
+}
+
+async function assignProfissional(id, nome){
+  const r = STATE.requests.find(x=>x.id===id);
+  if(r) r.atribuidoA = nome;
+  cacheState();
+  try{
+    await fetch(`${API}/requests/${id}`, {
+      method:"PATCH", headers:{ "Content-Type":"application/json" },
+      body: JSON.stringify({ atribuidoA: nome, adminToken })
+    });
+    toast(nome ? `Atribuído a ${nome}.` : "Devolvido pro grupo geral.");
+  }catch(e){ toast("Sem conexão: salvo só neste aparelho."); }
+}
+
+async function saveNota(id, texto){
+  const r = STATE.requests.find(x=>x.id===id);
+  if(r) r.notaAdmin = texto;
+  cacheState();
+  try{
+    await fetch(`${API}/requests/${id}`, {
+      method:"PATCH", headers:{ "Content-Type":"application/json" },
+      body: JSON.stringify({ notaAdmin: texto, adminToken })
     });
   }catch(e){ /* stays local until next sync */ }
 }
