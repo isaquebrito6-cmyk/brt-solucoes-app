@@ -298,24 +298,44 @@
         radial-gradient(900px 560px at 85% 0%, rgba(240,115,11,0.14), transparent 60%),
         var(--navy);
     }
-    #app{max-width:560px;box-shadow:0 0 60px rgba(9,17,29,0.35);}
-    .tabbar{max-width:560px;}
-    .toast{max-width:520px;}
+    #app{max-width:640px;box-shadow:0 0 60px rgba(9,17,29,0.35);}
+    .tabbar{max-width:640px;}
+    .toast{max-width:600px;}
     .hero h1{font-size:38px;}
     .hero p{max-width:380px;}
     .svc-grid{grid-template-columns:repeat(3,1fr);}
   }
 
   @media (min-width:960px){
-    #app{max-width:680px;}
-    .tabbar{max-width:680px;}
+    #app{max-width:960px;}
+    .tabbar{max-width:960px;}
     .toast{max-width:640px;}
-    .hero{padding:36px 40px 40px;display:flex;flex-direction:column;justify-content:center;}
-    .hero h1{font-size:44px;}
-    .hero p{max-width:440px;font-size:15.5px;}
-    section.pad{padding:26px 40px;}
-    .svc-grid{grid-template-columns:repeat(4,1fr);gap:12px;}
-    .topbar{padding:18px 40px 16px;}
+    .hero{padding:44px 56px 48px;}
+    .hero h1{font-size:50px;}
+    .hero p{max-width:480px;font-size:16px;}
+    .hero-cta .btn{padding:15px 24px;font-size:16px;}
+    section.pad{padding:32px 56px;}
+    .section-title{font-size:26px;}
+    .svc-grid{grid-template-columns:repeat(4,1fr);gap:14px;}
+    .svc-tile{padding:18px 16px;}
+    .topbar{padding:20px 56px 18px;}
+    /* text-heavy / form screens read better at a constrained width even
+       though the app shell itself now fills most of the browser window */
+    #cadastroForm,#cadastroSuccess .success-box,
+    #screen-perfil section.pad>*,#screen-login-pro section.pad>*,
+    #screen-login-admin section.pad>*,#screen-pro-panel section.pad>*,
+    #screen-admin-panel section.pad>*,#screen-termos section.pad>*,
+    #screen-privacidade section.pad>*{
+      max-width:600px;margin-left:auto;margin-right:auto;
+    }
+    #screen-servicos #svcList{max-width:760px;margin-left:auto;margin-right:auto;}
+    .card{max-width:600px;margin-left:auto;margin-right:auto;}
+  }
+
+  @media (min-width:1280px){
+    #app{max-width:1180px;}
+    .tabbar{max-width:1180px;}
+    .svc-grid{grid-template-columns:repeat(5,1fr);}
   }
 </style>
 </head>
