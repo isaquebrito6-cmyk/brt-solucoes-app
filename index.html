@@ -286,6 +286,37 @@
   .install-banner button{background:rgba(255,255,255,0.22);border:none;color:#fff;font-weight:700;
     padding:7px 12px;border-radius:7px;font-size:12px;flex-shrink:0;}
   .install-banner .x{background:none;color:#fff;opacity:.85;font-size:18px;padding:0 4px;}
+
+  /* ===================== RESPONSIVE — TABLET & DESKTOP ===================== */
+  /* #app, .tabbar and .toast share the same viewport-centered max-width so the
+     fixed bottom tabbar always lines up under the app column. #app keeps
+     min-height:100vh so it always reaches the bottom of the screen — the
+     backdrop below is only ever visible on the sides, never underneath. */
+  @media (min-width:600px){
+    body{
+      background:
+        radial-gradient(900px 560px at 85% 0%, rgba(240,115,11,0.14), transparent 60%),
+        var(--navy);
+    }
+    #app{max-width:560px;box-shadow:0 0 60px rgba(9,17,29,0.35);}
+    .tabbar{max-width:560px;}
+    .toast{max-width:520px;}
+    .hero h1{font-size:38px;}
+    .hero p{max-width:380px;}
+    .svc-grid{grid-template-columns:repeat(3,1fr);}
+  }
+
+  @media (min-width:960px){
+    #app{max-width:680px;}
+    .tabbar{max-width:680px;}
+    .toast{max-width:640px;}
+    .hero{padding:36px 40px 40px;display:flex;flex-direction:column;justify-content:center;}
+    .hero h1{font-size:44px;}
+    .hero p{max-width:440px;font-size:15.5px;}
+    section.pad{padding:26px 40px;}
+    .svc-grid{grid-template-columns:repeat(4,1fr);gap:12px;}
+    .topbar{padding:18px 40px 16px;}
+  }
 </style>
 </head>
 <body>
